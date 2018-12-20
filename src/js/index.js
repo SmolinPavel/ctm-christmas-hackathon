@@ -27,7 +27,7 @@ function getTextStyle() {
 }
 
 function drawLives() {
-  const richText = new PIXI.Text("Lives: " + lives, getTextStyle());
+  const richText = new PIXI.Text('Lives: ' + lives, getTextStyle());
   richText.x = 400;
   richText.y = 0;
   app.stage.addChild(richText);
@@ -40,6 +40,7 @@ function drawScore() {
   app.stage.addChild(richText);
 }
 
+const background = generateBackground();
 const paddleItem = generatePaddle();
 const bricksContainer = generateBricksContainer();
 
@@ -57,8 +58,6 @@ app.ticker.add(function(delta) {
     const child = bricksContainer.children[index];
     child.y += 1;
     child.rotation += 0.1 * delta;
-    child.tilePosition.x += 5;
-
   }
 
   newBricks = generateBricks();
@@ -71,6 +70,7 @@ app.ticker.add(function(delta) {
 
 });
 
+app.stage.addChild(background);
 app.stage.addChild(bricksContainer);
 app.stage.addChild(paddleItem);
 drawLives();

@@ -1,5 +1,5 @@
 const APP_CONFIG = {
-    backgroundColor: 0x9f9f9f
+  backgroundColor: 0xffffff,
 };
 const UI_TEXT_STYLE = {
     fontFamily: "Arial",

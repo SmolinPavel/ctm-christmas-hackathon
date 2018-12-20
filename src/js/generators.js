@@ -21,7 +21,7 @@ function generateBricks() {
 }
 
 function generateBricksContainer(){
-    return new PIXI.Container();
+  return new PIXI.Container();
 }
 
 function generatePaddle() {
@@ -41,7 +41,7 @@ function generatePaddle() {
 
 function generateBomb(top) {
   const texture = PIXI.Texture.fromImage('./assets/bomb.png');
-  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
+  const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);
@@ -52,10 +52,16 @@ function generateBomb(top) {
 
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage('./assets/axe.png');
-  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
+  const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.25, 0.25);
   return sprite;
+}
+
+function generateBackground() {
+  const texture = PIXI.Texture.fromImage('./assets/background_forest.png');
+  const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
+  return tilingSprite;
 }

@@ -8,10 +8,8 @@ let startGameTimestamp;
 
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
-let rightPressed = false;
-let rightPressedWithShift = false;
-let leftPressed = false;
-let leftPressedWithShift = false;
+const emptyKeybEvent =  {shiftKey : false, keyCode:0};
+let lastKeybEvent = emptyKeybEvent;
 
 const startPage = generateStartPage();
 const santaPerson = generateSantaPerson();
@@ -19,58 +17,57 @@ const bricksContainer = generateBricksContainer();
 const background = generateBackground();
 
 function getFrameX(frame_width, framePosition) {
-  return frame_width * framePosition;
+  return -frame_width * framePosition;
 }
 
 function getFrameY(frame_height, framePosition) {
-  return frame_height * Math.round(framePosition / 8);
+  return -frame_height * Math.floor(framePosition / 9);
 }
 
 function wrapUpdate(santaPerson, bricksContainer, background) {
-  return function update(delta) {
-    const santaRight = santaPerson.x + santaPerson.width / 2;
-    const santaLeft = santaPerson.x - santaPerson.width / 2;
-    if (rightPressed && santaRight < APP_WIDTH) {
-      santaPerson.x += 7;
-      santaPerson.scale.set(-1, 1);
-    } else if (leftPressed && santaLeft > 0) {
-      santaPerson.x -= 7;
-      santaPerson.scale.set(1, 1);
-    } else if (rightPressedWithShift && santaRight < APP_WIDTH) {
-      santaPerson.x += 21;
-    } else if (leftPressedWithShift && santaLeft > 0) {
-      santaPerson.x -= 21;
-    }
-    for (const index in bricksContainer.children) {
-      const child = bricksContainer.children[index];
-      if (child.y > APP_HEIGHT) {
-        if (Math.abs(child.x - santaPerson.x) < 100) {
-          gameOver();
+    return function update(delta) {
+        const halfOfSanta = santaPerson.width / 2;
+        let speed =  lastKeybEvent.shiftKey ? 21 : 7;
+        let turn = 0;
+        if (lastKeybEvent.keyCode === 39){
+            turn = 1;
         }
-        bricksContainer.children.splice(index, 1);
-      } else {
-        child.y += 1;
-        child.rotation += 0.05 * delta;
-      }
-    }
+        else if (lastKeybEvent.keyCode === 37){
+            turn = -1;
+        }
+        if (turn !== 0) {
+            speed *= turn;
+            santaPerson.scale.set(-turn, 1);
+            let rightCorellation = Math.min(santaPerson.x + speed, APP_WIDTH - halfOfSanta);
+            santaPerson.x = Math.max(rightCorellation, halfOfSanta);
+        }
 
-    let delta_santa = Date.now() - start_generation_time;
-    santaPerson.tilePosition.x = getFrameX(
-      SANTA_WIDTH,
-      Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND)
-    );
-    santaPerson.tilePosition.y = getFrameY(
-      SANTA_HEIGHT,
-      Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND)
-    );
-    background.tilePosition.y += 1;
-    const newBricks = generateBricks();
-    for (const key in newBricks) {
-      if (newBricks.hasOwnProperty(key)) {
-        const brick = newBricks[key];
-        bricksContainer.addChild(brick);
-      }
-    }
+        for (const index in bricksContainer.children) {
+            const child = bricksContainer.children[index];
+            if (child.y > APP_HEIGHT) {
+                if (Math.abs(child.x - santaPerson.x) < 100) {
+                    gameOver();
+                }
+                bricksContainer.children.splice(index, 1);
+            } else {
+                child.y += 1;
+                child.rotation += 0.05 * delta;
+            }
+        }
+
+        let delta_santa = Date.now() - start_generation_time;
+
+        const santaFrame = (delta_santa / 1000 / SANTA_FRAMES_PER_SECOND - 1);
+        santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(santaFrame % 51));
+        santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(santaFrame % 51));
+        background.tilePosition.y += 1;
+        const newBricks = generateBricks();
+        for (const key in newBricks) {
+            if (newBricks.hasOwnProperty(key)) {
+                const brick = newBricks[key];
+                bricksContainer.addChild(brick);
+            }
+        }
 
     deltaUdpate = Date.now() - timeOfLastPartialUpdate;
     if (
@@ -116,30 +113,12 @@ function loadGame() {
   startGameTimestamp = Date.now();
 }
 
-function keyDownHandler({ keyCode, shiftKey }) {
-  if (keyCode === 39) {
-    if (shiftKey) {
-      rightPressedWithShift = true;
-    } else {
-      rightPressed = true;
-    }
-  } else if (keyCode === 37) {
-    if (shiftKey) {
-      leftPressedWithShift = true;
-    } else {
-      leftPressed = true;
-    }
-  }
+function keyDownHandler(e) {
+  lastKeybEvent = e;
 }
 
-function keyUpHandler({ keyCode }) {
-  if (keyCode === 39) {
-    rightPressed = false;
-    rightPressedWithShift = false;
-  } else if (keyCode === 37) {
-    leftPressed = false;
-    leftPressedWithShift = false;
-  }
+function keyUpHandler(e) {
+  lastKeybEvent = emptyKeybEvent;
 }
 
 function mouseMoveHandler(e) {

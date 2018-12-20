@@ -1,13 +1,13 @@
 let last_generation_time = 0;
 let start_generation_time = Date.now();
-let delta_treshold = 1000;
+let delta_treshold = 4000;
 
 function generateBricks() {
   const now = Date.now();
   const delta = now - last_generation_time;
   let outcome = [];
   if ((delta > delta_treshold) || (last_generation_time === 0)){
-    delta_treshold = Math.max(delta_treshold * 0.95, 100);
+    delta_treshold = Math.max(delta_treshold * 0.95, 400);
     last_generation_time = now;
     game_time_in_sec = (now - start_generation_time) / 1000;
     if (Math.random() > 0.5) {
@@ -40,7 +40,9 @@ function generateBomb(top) {
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
-  attachSparckles(sprite);
+  if (Math.random() > 0.75) {
+      attachSparckles(sprite);
+  }
   return sprite;
 }
 

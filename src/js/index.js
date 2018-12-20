@@ -52,19 +52,20 @@ function updateSantaAnimation(santaPerson){
 function updateAnimations(santaPerson, bricksContainer, background, delta){
     for (const index in bricksContainer.children) {
         const child = bricksContainer.children[index];
-        if (child.y > APP_HEIGHT) {
-            if (Math.abs(child.x - santaPerson.x) < 100) {
+        if (child.y > APP_HEIGHT - santaPerson.height/2) {
+            if (Math.abs(child.x - santaPerson.x) < santaPerson.width/2) {
                 santaDiedTime = Date.now();
                 const ifrm = document.getElementById("sndframe");
                 ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/282913659&color=%23ff5500&auto_play=true");
             }
-            bricksContainer.children.splice(index, 1);
+            child.removeChildren();
+            bricksContainer.removeChild(child);
         } else {
             child.y += 1;
             child.rotation += 0.05 * delta;
         }
     }
-    background.tilePosition.y += 1;
+    background.tilePosition.y += 1 + 2*( Date.now() - start_generation_time)/GAME_COUNTDOWN_SECONDS/1000;
 }
 
 function updateBricks(bricksContainer){

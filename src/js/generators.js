@@ -47,7 +47,7 @@ function generateBomb(top) {
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage(AXE_URL);
   const sprite = new PIXI.Sprite(texture);
-  sprite.x = Math.random() * APP_WIDTH;
+  sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.25, 0.25);

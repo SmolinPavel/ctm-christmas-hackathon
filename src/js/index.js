@@ -9,6 +9,8 @@ const emptyKeybEvent =  {shiftKey : false, keyCode:0};
 let lastKeybEvent = emptyKeybEvent;
 let santaDiedTime = 0;
 let paused = false;
+let pauseTime = 0;
+let pauseStartedTime = 0;
 
 function getFrameX(frame_width, framePosition) {
   return -frame_width * framePosition;
@@ -53,7 +55,8 @@ function updateAnimations(santaPerson, bricksContainer, background, delta){
         if (child.y > APP_HEIGHT) {
             if (Math.abs(child.x - santaPerson.x) < 100) {
                 santaDiedTime = Date.now();
-
+                const ifrm = document.getElementById("sndframe");
+                ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/282913659&color=%23ff5500&auto_play=true");
             }
             bricksContainer.children.splice(index, 1);
         } else {
@@ -82,7 +85,7 @@ function updateGameStatus(){
     ) {
         // TODO add cheap checks here
         const secondsLeft = Math.ceil(
-            GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
+            GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000 + pauseTime
         );
         if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
             finishGame();
@@ -100,11 +103,10 @@ function updateGameStatus(){
 
 function wrapUpdate(santaPerson, bricksContainer, background) {
     return function update(delta) {
-
         if (!paused) {
             if (santaDiedTime === 0) {
                 updateKeys(santaPerson);
-                updateAnimations(santaPerson, bricksContainer, background);
+                updateAnimations(santaPerson, bricksContainer, background, delta);
                 updateBricks(bricksContainer);
                 updateGameStatus();
             } else {
@@ -141,6 +143,7 @@ function loadGame() {
 
   startGameTimestamp = Date.now();
   const ifrm = document.createElement("iframe");
+  ifrm.setAttribute("id", "sndframe");
   ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/371455856&color=%23ff5500&auto_play=true");
   ifrm.setAttribute("style", "opacity: 0;")
   setTimeout(() => document.body.appendChild(ifrm), 1000);
@@ -149,6 +152,12 @@ function loadGame() {
 
 function keyDownHandler(e) {
     if (["Space", "Escape"].indexOf(e.code) !== -1){
+        if (paused){
+            pauseTime += (Date.now() -pauseStartedTime) / 1000;
+        }
+        else{
+            pauseStartedTime = Date.now();
+        }
         paused = !paused;
     }
     else {

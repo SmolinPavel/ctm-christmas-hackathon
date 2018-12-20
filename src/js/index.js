@@ -62,7 +62,7 @@ const paddleItem = generatePaddle();
 const bricksContainer = generateBricks();
 
 app.ticker.add(function(delta) {
-  bricksContainer.x += 0.1;
+  bricksContainer.y += 0.1;
 });
 
 app.stage.addChild(bricksContainer);

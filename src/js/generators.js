@@ -10,6 +10,10 @@ function generateBricks() {
             bricksContainer.addChild(brickContainer);
         }
     }
+    const texture = PIXI.Texture.fromImage('./assets/bomb.png');
+    const bomb = new PIXI.Sprite(texture);
+    bomb.alpha = 0.1;
+    bricksContainer.addChild(bomb);
     return bricksContainer;
 }
 

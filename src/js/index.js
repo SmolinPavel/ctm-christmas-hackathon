@@ -43,7 +43,7 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                 bricksContainer.children.splice(index, 1);
             } else {
                 child.y += 1;
-                child.rotation += 0.1 * delta;
+                child.rotation += 0.05 * delta;
             }
         }
 

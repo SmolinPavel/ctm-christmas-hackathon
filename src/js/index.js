@@ -8,35 +8,37 @@ let startGameTimestamp;
 
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
-let rightPressed = false;
-let rightPressedWithShift = false;
-let leftPressed = false;
-let leftPressedWithShift = false;
+const emptyKeybEvent =  {shiftKey : false, keyCode:0};
+let lastKeybEvent = emptyKeybEvent;
 
 const startPage = generateStartPage();
 
 function getFrameX(frame_width, framePosition) {
-  return frame_width * framePosition;
+  return -frame_width * framePosition;
 }
 
 function getFrameY(frame_height, framePosition) {
-  return frame_height * Math.round(framePosition / 8);
+  return -frame_height * Math.floor(framePosition / 9);
 }
 
 function wrapUpdate(santaPerson, bricksContainer, background) {
     return function update(delta) {
-        const santaRight = santaPerson.x + santaPerson.width
-        if (rightPressed && santaRight < APP_WIDTH) {
-            santaPerson.x += 7;
-            santaPerson.scale.set(-1, 1);
-        } else if (leftPressed && santaPerson.x > 0) {
-            santaPerson.x -= 7;
-            santaPerson.scale.set(1, 1);
-        } else if (rightPressedWithShift && santaRight < APP_WIDTH - paddleWidth) {
-            santaPerson.x += 21;
-        } else if (leftPressedWithShift && santaRight > 0) {
-            santaPerson.x -= 21;
+        const halfOfSanta = santaPerson.width / 2;
+        let speed =  lastKeybEvent.shiftKey ? 21 : 7;
+        let turn = 0;
+        if (lastKeybEvent.keyCode === 39){
+            turn = 1;
         }
+        else if (lastKeybEvent.keyCode === 37){
+            turn = -1;
+        }
+        if (turn !== 0) {
+            speed *= turn;
+            santaPerson.scale.set(-turn, 1);
+            let rightCorellation = Math.min(santaPerson.x + speed, APP_WIDTH - halfOfSanta);
+            santaPerson.x = Math.max(rightCorellation, halfOfSanta);
+        }
+
         for (const index in bricksContainer.children) {
             const child = bricksContainer.children[index];
             if (child.y > APP_HEIGHT) {
@@ -51,8 +53,10 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
         }
 
         let delta_santa = Date.now() - start_generation_time;
-        santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
-        santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
+
+        const santaFrame = (delta_santa / 1000 / SANTA_FRAMES_PER_SECOND - 1);
+        santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(santaFrame % 51));
+        santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(santaFrame % 51));
         background.tilePosition.y += 1;
         const newBricks = generateBricks();
         for (const key in newBricks) {
@@ -108,29 +112,11 @@ function loadGame() {
 }
 
 function keyDownHandler(e) {
-  if (e.keyCode === 39) {
-    if (e.shiftKey) {
-      rightPressedWithShift = true;
-    } else {
-      rightPressed = true;
-    }
-  } else if (e.keyCode === 37) {
-    if (e.shiftKey) {
-      leftPressedWithShift = true;
-    } else {
-      leftPressed = true;
-    }
-  }
+  lastKeybEvent = e;
 }
 
 function keyUpHandler(e) {
-  if (e.keyCode === 39) {
-    rightPressed = false;
-    rightPressedWithShift = false;
-  } else if (e.keyCode === 37) {
-    leftPressed = false;
-    leftPressedWithShift = false;
-  }
+  lastKeybEvent = emptyKeybEvent;
 }
 
 function mouseMoveHandler(e) {

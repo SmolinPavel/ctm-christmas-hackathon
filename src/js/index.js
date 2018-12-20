@@ -57,7 +57,6 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
     }
 }
 
-
 function loadGame() {
   const santaPerson = generateSantaPerson();
   const bricksContainer = generateBricksContainer();
@@ -74,6 +73,7 @@ function loadGame() {
   app.stage.addChild(generateUIText("Score: " + score,8, 0));
 
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
+
 }
 
 function keyDownHandler(e) {

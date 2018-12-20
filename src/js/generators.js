@@ -58,8 +58,9 @@ function generateBackground() {
   const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
   return tilingSprite;
 }
+
 function generateUIText(text, x, y){
-    const richText = new PIXI.Text(text, getTextStyle());
+    const richText = new PIXI.Text(text, new PIXI.TextStyle(UI_TEXT_STYLE));
     richText.x = x;
     richText.y = y;
     return richText

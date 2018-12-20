@@ -3,11 +3,6 @@ document.body.appendChild(app.view);
 
 let lives = 3;
 let score = 0;
-const bricks = [];
-const brickWidth = 75;
-const brickHeight = 20;
-const brickRowCount = 3;
-const brickColumnCount = 5;
 
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
@@ -15,18 +10,6 @@ let rightPressed = false;
 let rightPressedWithShift = false;
 let leftPressed = false;
 let leftPressedWithShift = false;
-
-function getTextStyle() {
-  return new PIXI.TextStyle(UI_TEXT_STYLE);
-}
-
-function drawLives() {
-  app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
-}
-
-function drawScore() {
-  app.stage.addChild(generateUIText("Score: " + score,8, 0));
-}
 
 function getFrameX(frame_width, framePosition){
   return frame_width * framePosition ;
@@ -72,19 +55,22 @@ app.ticker.add(function(delta) {
   }
 });
 
-const santaPerson = generateSantaPerson();
-const bricksContainer = generateBricksContainer();
-const background = generateBackground();
-app.stage.addChild(background);
-app.stage.addChild(bricksContainer);
-app.stage.addChild(santaPerson);
 
-drawLives();
-drawScore();
+function loadGame() {
+  const santaPerson = generateSantaPerson();
+  const bricksContainer = generateBricksContainer();
+  const background = generateBackground();
+  app.stage.addChild(background);
+  app.stage.addChild(bricksContainer);
+  app.stage.addChild(santaPerson);
 
-document.addEventListener("keydown", keyDownHandler);
-document.addEventListener("keyup", keyUpHandler);
-document.addEventListener("mousemove", mouseMoveHandler);
+  document.addEventListener("keydown", keyDownHandler);
+  document.addEventListener("keyup", keyUpHandler);
+  document.addEventListener("mousemove", mouseMoveHandler);
+
+  app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
+  app.stage.addChild(generateUIText("Score: " + score,8, 0));
+}
 
 function keyDownHandler(e) {
   if (e.keyCode === 39) {
@@ -118,3 +104,5 @@ function mouseMoveHandler(e) {
     paddleX = relativeX - paddleWidth / 2;
   }
 }
+
+loadGame();

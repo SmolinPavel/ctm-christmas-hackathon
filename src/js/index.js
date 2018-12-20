@@ -73,7 +73,7 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                 GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
             );
             if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
-                alert("WIN");
+               finishGame();
             } else {
                 document.getElementById("minutes").innerHTML = '0:';
                 document.getElementById("seconds").innerHTML = (`0${secondsLeft}`).slice(-2);
@@ -147,6 +147,14 @@ function gameOver() {
 	app.stage.removeChild(bricksContainer);
 	app.stage.removeChild(santaPerson);
 	app.stage.addChild(gameOverPage);
+}
+
+function finishGame() {
+	const finishGamePage = generateFinishPage();
+	app.stage.removeChild(background);
+	app.stage.removeChild(bricksContainer);
+	app.stage.removeChild(santaPerson);
+	app.stage.addChild(finishGamePage);
 }
 
 loadStartPage();

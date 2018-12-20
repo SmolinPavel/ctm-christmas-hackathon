@@ -74,6 +74,12 @@ function generateStartPage() {
 	return sprite;
   }
 
+  function generateFinishPage() {
+	const texture = PIXI.Texture.fromImage(FINISH_PAGE_URL);
+	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
+	return sprite;
+  }
+
   function generateGameOverPage() {
 	const texture = PIXI.Texture.fromImage(GAME_OVER_PAGE_URL);
 	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);

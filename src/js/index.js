@@ -69,7 +69,7 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                 alert("WIN");
             } else {
                 document.getElementById("minutes").innerHTML = '0:';
-                document.getElementById("seconds").innerHTML = (`${secondsLeft}`);
+                document.getElementById("seconds").innerHTML = (`0${secondsLeft}`).slice(-2);
                 timeOfLastPartialUpdate = Date.now();
             }
         }

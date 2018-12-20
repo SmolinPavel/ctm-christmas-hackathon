@@ -27,3 +27,4 @@ BRICK_BACK_COLOR = 0x0095DD;
 BOMB_URL = './assets/bomb.png';
 AXE_URL = './assets/axe.png';
 SANTA_URL = './assets/santas.png';
+BACKGROUND_URL = './assets/background_forest.png';

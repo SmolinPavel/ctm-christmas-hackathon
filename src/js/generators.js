@@ -47,7 +47,7 @@ function generateBomb(top) {
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage(AXE_URL);
   const sprite = new PIXI.Sprite(texture);
-  sprite.x = Math.random() * APP_WIDTH;
+  sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.25, 0.25);
@@ -61,9 +61,9 @@ function generateBackground() {
   return tilingSprite;
 }
 
-const generateStartPage = callback => generatePage(START_PAGE_URL, callback);
-const generateFinishPage = callback => generatePage(FINISH_PAGE_URL, callback);
-const generateGameOverPage = callback => generatePage(GAME_OVER_PAGE_URL, callback);
+const generateStartPage = callback => generatePage(START_PAGE_URL, callback, true);
+const generateFinishPage = callback => generatePage(FINISH_PAGE_URL, callback, false);
+const generateGameOverPage = callback => generatePage(GAME_OVER_PAGE_URL, callback, false);
 
 const startKeyDownHandler = ({ keyCode }, sprite, callback) => {
     if (keyCode === 13) {
@@ -72,14 +72,16 @@ const startKeyDownHandler = ({ keyCode }, sprite, callback) => {
     }
 };
 
-const generatePage = (pageUrl, callback) => {
+const generatePage = (pageUrl, callback, removeSprite) => {
     const texture = PIXI.Texture.fromImage(pageUrl);
     const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
     document.addEventListener("keydown", (e) => startKeyDownHandler(e, sprite, callback));
     sprite.interactive = true;
     sprite.buttonMode = true;
     sprite.on('pointerdown', function (e){
-        sprite.parent.removeChild(sprite);
+        if (removeSprite) {
+          sprite.parent.removeChild(sprite);
+        }
         callback();
     });
 

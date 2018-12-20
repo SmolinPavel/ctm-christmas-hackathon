@@ -4,7 +4,7 @@ function attachSparckles(container){
     var updt = function(){
         requestAnimationFrame(updt);
         var now = Date.now();
-        emitter.update((now - elapsed) * 0.001);
+        emitter.update((now - elapsed) * 0.003);
         elapsed = now;
     };
 

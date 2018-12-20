@@ -27,8 +27,9 @@ function generateBricksContainer(){
 function generateSantaPerson() {
   const texture = PIXI.Texture.fromImage(SANTA_URL);
   const santa = new PIXI.extras.TilingSprite(texture, SANTA_WIDTH, SANTA_HEIGHT);
-  santa.y = app.screen.height - SANTA_HEIGHT;
+  santa.y = app.screen.height - SANTA_HEIGHT / 2;
   santa.x = app.screen.width / 2 - SANTA_WIDTH / 2;
+  santa.anchor.set(0.5);
   return santa;
 }
 

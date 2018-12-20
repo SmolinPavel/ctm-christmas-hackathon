@@ -62,7 +62,6 @@ const paddleItem = generatePaddle();
 const bricksContainer = generateBricks();
 
 app.ticker.add(function(delta) {
-  bricksContainer.x += 0.1;
   if (rightPressed && paddleItem.x + paddleItem.width < APP_WIDTH) {
     paddleItem.x += 7;
   } else if (leftPressed && paddleItem.x > 0) {
@@ -72,6 +71,7 @@ app.ticker.add(function(delta) {
   } else if (leftPressedWithShift && rightNullX > 0) {
     paddleItem.x -= 21;
   }
+  bricksContainer.y += 0.1;
 });
 
 app.stage.addChild(bricksContainer);

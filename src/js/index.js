@@ -41,7 +41,7 @@ function drawScore() {
 }
 
 const paddleItem = generatePaddle();
-const bricksContainer = generateBricks();
+const bricksContainer = generateBricksContainer();
 
 app.ticker.add(function(delta) {
   if (rightPressed && paddleItem.x + paddleItem.width < APP_WIDTH) {
@@ -53,7 +53,21 @@ app.ticker.add(function(delta) {
   } else if (leftPressedWithShift && rightNullX > 0) {
     paddleItem.x -= 21;
   }
-  bricksContainer.y += 0.1;
+  for (const index in bricksContainer.children){
+    const child = bricksContainer.children[index];
+    child.y += 1;
+    child.rotation += 0.1 * delta;
+
+  }
+
+  newBricks = generateBricks();
+  for(const key in newBricks){
+    if (newBricks.hasOwnProperty(key)) {
+      const brick = newBricks[key];
+      bricksContainer.addChild(brick);
+    }
+  }
+
 });
 
 app.stage.addChild(bricksContainer);

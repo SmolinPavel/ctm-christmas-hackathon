@@ -28,22 +28,23 @@ function getFrameY(frame_height, framePosition) {
 
 function wrapUpdate(santaPerson, bricksContainer, background) {
     return function update(delta) {
-        const santaRight = santaPerson.x + santaPerson.width
+        const santaRight = santaPerson.x + (santaPerson.width / 2);
+        const santaLeft = santaPerson.x - (santaPerson.width / 2);
         if (rightPressed && santaRight < APP_WIDTH) {
             santaPerson.x += 7;
             santaPerson.scale.set(-1, 1);
-        } else if (leftPressed && santaPerson.x > 0) {
+        } else if (leftPressed && santaLeft > 0) {
             santaPerson.x -= 7;
             santaPerson.scale.set(1, 1);
-        } else if (rightPressedWithShift && santaRight < APP_WIDTH - paddleWidth) {
+        } else if (rightPressedWithShift && santaRight < APP_WIDTH) {
             santaPerson.x += 21;
-        } else if (leftPressedWithShift && santaRight > 0) {
+        } else if (leftPressedWithShift && santaLeft > 0) {
             santaPerson.x -= 21;
         }
         for (const index in bricksContainer.children) {
             const child = bricksContainer.children[index];
             if (child.y > APP_HEIGHT) {
-                if (Math.abs(child.x - santaPerson.x) < 100) {					
+                if (Math.abs(child.x - santaPerson.x) < 100) {
 					gameOver();
                 }
                 bricksContainer.children.splice(index, 1);

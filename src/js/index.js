@@ -57,6 +57,7 @@ app.ticker.add(function(delta) {
     const child = bricksContainer.children[index];
     child.y += 1;
     child.rotation += 0.1 * delta;
+    child.tilePosition.x += 5;
 
   }
 

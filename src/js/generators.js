@@ -7,7 +7,7 @@ function generateBricks() {
   const delta = now - last_generation_time;
   let outcome = [];
   if ((delta > delta_treshold) || (last_generation_time === 0)){
-    delta_treshold *= 0.9;
+    delta_treshold *= 0.95;
     last_generation_time = now;
     game_time_in_sec = (now - start_generation_time) / 1000;
     if (Math.random() > 0.5) {
@@ -41,17 +41,18 @@ function generatePaddle() {
 
 function generateBomb(top) {
   const texture = PIXI.Texture.fromImage('./assets/bomb.png');
-  const sprite = new PIXI.Sprite(texture);
+  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
+
   return sprite;
 }
 
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage('./assets/axe.png');
-  const sprite = new PIXI.Sprite(texture);
+  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);

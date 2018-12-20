@@ -12,6 +12,9 @@ let leftPressed = false;
 let leftPressedWithShift = false;
 
 const startPage = generateStartPage();
+const santaPerson = generateSantaPerson();
+const bricksContainer = generateBricksContainer();
+const background = generateBackground();
 
 function getFrameX(frame_width, framePosition){
   return frame_width * framePosition ;
@@ -35,8 +38,8 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
         for (const index in bricksContainer.children) {
             const child = bricksContainer.children[index];
             if (child.y > APP_HEIGHT) {
-                if (Math.abs(child.x - santaPerson.x) < 100) {
-                    alert("Smash it!");
+                if (Math.abs(child.x - santaPerson.x) < 100) {					
+					gameOver();
                 }
                 bricksContainer.children.splice(index, 1);
             } else {
@@ -65,9 +68,6 @@ function loadStartPage() {
 
 function loadGame() {
   app.stage.removeChild(startPage);
-  const santaPerson = generateSantaPerson();
-  const bricksContainer = generateBricksContainer();
-  const background = generateBackground();
   app.stage.addChild(background);
   app.stage.addChild(bricksContainer);
   app.stage.addChild(santaPerson);
@@ -115,8 +115,12 @@ function mouseMoveHandler(e) {
   }
 }
 
-function startGame(e) {
-	isStartGame = true;
+function gameOver() {
+	const gameOverPage = generateGameOverPage();
+	app.stage.removeChild(background);
+	app.stage.removeChild(bricksContainer);
+	app.stage.removeChild(santaPerson);
+	app.stage.addChild(gameOverPage);
 }
 
 loadStartPage();

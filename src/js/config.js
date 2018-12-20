@@ -29,6 +29,7 @@ const AXE_URL = './assets/axe.png';
 const SANTA_URL = './assets/santas.png';
 const BACKGROUND_URL = './assets/background_forest.png';
 const START_PAGE_URL = './assets/start_picture.jpg';
+const GAME_OVER_PAGE_URL = './assets/game_over_page.jpg';
 
 const SANTA_WIDTH = 576/9;
 const SANTA_HEIGHT = 384/6;

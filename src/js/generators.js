@@ -61,12 +61,17 @@ function generateBackground() {
   return tilingSprite;
 }
 
-function generateStartPage() {
-	const texture = PIXI.Texture.fromImage(START_PAGE_URL);
+function generateStartPage(onFinishSceneHandler) {
+    document.addEventListener("keydown", startKeyDownHandler);
+
+    const texture = PIXI.Texture.fromImage(START_PAGE_URL);
 	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
 	sprite.interactive = true;
 	sprite.buttonMode = true;
-	sprite.on('pointerdown', onClickStartPageHandler);
+	sprite.on('pointerdown', function (){
+	  sprite.parent.removeChild(sprite);
+      onFinishSceneHandler();
+    });
 	return sprite;
   }
 
@@ -82,13 +87,8 @@ function generateStartPage() {
 	return sprite;
   }
 
-function generateUIText(text, x, y){
-    const richText = new PIXI.Text(text, new PIXI.TextStyle(UI_TEXT_STYLE));
-    richText.x = x;
-    richText.y = y;
-    return richText
-}
-
-function onClickStartPageHandler () {
-	loadGame();
-}
+  const startKeyDownHandler = ({ keyCode }) => {
+      if (keyCode === 13) {
+          loadGame();
+      }
+  };

@@ -18,34 +18,26 @@ function generateBricks() {
 }
 
 function generatePaddle() {
-    const paddle = new PIXI.Graphics();
+  const paddle = new PIXI.Graphics();
 
-    paddle.drawRect(
-        paddleX,
-        APP_HEIGHT - paddleHeight,
-        paddleWidth,
-        paddleHeight
-    );
-    paddle.beginFill(0x0095dd, 0.25);
-    paddle.lineStyle(2, 0x000000, 1);
-    paddle.drawRect(
-        paddleX,
-        APP_HEIGHT - paddleHeight,
-        paddleWidth,
-        paddleHeight,
-        15
-    );
-    paddle.endFill();
+  paddle.drawRect(0, 0, paddleWidth, paddleHeight);
+  paddle.beginFill(0x0095dd, 0.25);
+  paddle.lineStyle(2, 0x000000, 1);
+  paddle.drawRect(0, 0, paddleWidth, paddleHeight, 15);
+  paddle.x = paddleX;
+  paddle.y = APP_HEIGHT - paddleHeight;
 
-    //   if (rightPressed && paddleX < APP_WIDTH - paddleWidth) {
-    //     paddleX += 7;
-    //   } else if (leftPressed && paddleX > 0) {
-    //     paddleX -= 7;
-    //   } else if (rightPressedWithShift && paddleX < canvas.width - paddleWidth) {
-    //     paddleX += 21;
-    //   } else if (leftPressedWithShift && paddleX > 0) {
-    //     paddleX -= 21;
-    //   }
+  paddle.endFill();
 
-    return paddle;
+  //   if (rightPressed && paddleX < APP_WIDTH - paddleWidth) {
+  //     paddleX += 7;
+  //   } else if (leftPressed && paddleX > 0) {
+  //     paddleX -= 7;
+  //   } else if (rightPressedWithShift && paddleX < canvas.width - paddleWidth) {
+  //     paddleX += 21;
+  //   } else if (leftPressedWithShift && paddleX > 0) {
+  //     paddleX -= 21;
+  //   }
+
+  return paddle;
 }

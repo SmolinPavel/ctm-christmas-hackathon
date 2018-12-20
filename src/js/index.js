@@ -1,5 +1,5 @@
 const app = new PIXI.Application(APP_WIDTH, APP_HEIGHT, {
-  backgroundColor: 0xffffff
+  backgroundColor: 0x9f9f9f
 });
 document.body.appendChild(app.view);
 
@@ -62,6 +62,15 @@ const paddleItem = generatePaddle();
 const bricksContainer = generateBricks();
 
 app.ticker.add(function(delta) {
+  if (rightPressed && paddleItem.x + paddleItem.width < APP_WIDTH) {
+    paddleItem.x += 7;
+  } else if (leftPressed && paddleItem.x > 0) {
+    paddleItem.x -= 7;
+  } else if (rightPressedWithShift && rightNullX < APP_WIDTH - paddleWidth) {
+    paddleItem.x += 21;
+  } else if (leftPressedWithShift && rightNullX > 0) {
+    paddleItem.x -= 21;
+  }
   bricksContainer.y += 0.1;
 });
 
@@ -69,3 +78,40 @@ app.stage.addChild(bricksContainer);
 app.stage.addChild(paddleItem);
 drawLives();
 drawScore();
+
+document.addEventListener("keydown", keyDownHandler);
+document.addEventListener("keyup", keyUpHandler);
+document.addEventListener("mousemove", mouseMoveHandler);
+
+function keyDownHandler(e) {
+  if (e.keyCode === 39) {
+    if (e.shiftKey) {
+      rightPressedWithShift = true;
+    } else {
+      rightPressed = true;
+    }
+  } else if (e.keyCode === 37) {
+    if (e.shiftKey) {
+      leftPressedWithShift = true;
+    } else {
+      leftPressed = true;
+    }
+  }
+}
+
+function keyUpHandler(e) {
+  if (e.keyCode === 39) {
+    rightPressed = false;
+    rightPressedWithShift = false;
+  } else if (e.keyCode === 37) {
+    leftPressed = false;
+    leftPressedWithShift = false;
+  }
+}
+
+function mouseMoveHandler(e) {
+  const relativeX = e.clientX - APP_OFFSET_LEFT;
+  if (relativeX > paddleWidth / 2 && relativeX < APP_WIDTH - paddleWidth / 2) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}

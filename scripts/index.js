@@ -27,23 +27,19 @@ let rightPressedWithShift = false;
 let leftPressed = false;
 let leftPressedWithShift = false;
 
-function drawBricks() {
-  const bricksContainer = new PIXI.Graphics();
-  for (let c = 0; c < brickColumnCount; c++) {
-    for (let r = 0; r < brickRowCount; r++) {
-      bricksContainer.lineStyle(2, 0x000000, 1);
-      bricksContainer.beginFill(0x0095dd, 0.25);
-      bricksContainer.drawRect(
-        c * (brickWidth + brickPadding) + brickOffsetLeft,
-        r * (brickHeight + brickPadding) + brickOffsetTop,
-        brickWidth,
-        brickHeight,
-        15
-      );
-      bricksContainer.endFill();
+function generateBricks() {
+    const bricksContainer = new PIXI.Container();
+    for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++){
+        for (let colIndex = 0; colIndex < brickColumnCount; colIndex++){
+            const brickContainer = new PIXI.Graphics();
+            brickContainer.lineStyle(2, 0x000000, 1);
+            brickContainer.beginFill(0x0095DD, 0.25);
+            brickContainer.drawRect(colIndex * (brickWidth + brickPadding) + brickOffsetLeft, rowIndex * (brickHeight + brickPadding) + brickOffsetTop, brickWidth, brickHeight, 15);
+            brickContainer.endFill();
+            bricksContainer.addChild(brickContainer);
+        }
     }
-  }
-  return bricksContainer;
+    return bricksContainer;
 }
 
 function generatePaddle() {
@@ -100,21 +96,21 @@ function getTextStyle() {
 }
 
 function drawLives() {
-  var richText = new PIXI.Text("Lives: " + lives, getTextStyle());
+  const richText = new PIXI.Text("Lives: " + lives, getTextStyle());
   richText.x = 400;
   richText.y = 0;
   app.stage.addChild(richText);
 }
 
 function drawScore() {
-  var richText = new PIXI.Text("Score: " + score, getTextStyle());
+  const richText = new PIXI.Text("Score: " + score, getTextStyle());
   richText.x = 8;
   richText.y = 0;
   app.stage.addChild(richText);
 }
 
-const bricksContainer = drawBricks();
 const paddleItem = generatePaddle();
+const bricksContainer = generateBricks();
 
 app.ticker.add(function(delta) {
   bricksContainer.x += 0.1;

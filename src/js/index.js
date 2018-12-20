@@ -6,15 +6,9 @@ let score = 0;
 const bricks = [];
 const brickWidth = 75;
 const brickHeight = 20;
-const brickPadding = 10;
-const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
 const brickRowCount = 3;
 const brickColumnCount = 5;
 
-let dx = 2;
-let dy = -2;
-const paddleHeight = 10;
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
 let rightPressed = false;
@@ -27,38 +21,33 @@ function getTextStyle() {
 }
 
 function drawLives() {
-  const richText = new PIXI.Text('Lives: ' + lives, getTextStyle());
-  richText.x = 400;
-  richText.y = 0;
-  app.stage.addChild(richText);
+  app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
 }
 
 function drawScore() {
-  const richText = new PIXI.Text("Score: " + score, getTextStyle());
-  richText.x = 8;
-  richText.y = 0;
-  app.stage.addChild(richText);
+  app.stage.addChild(generateUIText("Score: " + score,8, 0));
 }
 
-const background = generateBackground();
-const paddleItem = generatePaddle();
-const bricksContainer = generateBricksContainer();
-
+var count = 0;
 app.ticker.add(function(delta) {
-  if (rightPressed && paddleItem.x + paddleItem.width < APP_WIDTH) {
-    paddleItem.x += 7;
-  } else if (leftPressed && paddleItem.x > 0) {
-    paddleItem.x -= 7;
+  if (rightPressed && santaPerson.x + santaPerson.width < APP_WIDTH) {
+    santaPerson.x += 7;
+  } else if (leftPressed && santaPerson.x > 0) {
+    santaPerson.x -= 7;
   } else if (rightPressedWithShift && rightNullX < APP_WIDTH - paddleWidth) {
-    paddleItem.x += 21;
+    santaPerson.x += 21;
   } else if (leftPressedWithShift && rightNullX > 0) {
-    paddleItem.x -= 21;
+    santaPerson.x -= 21;
   }
   for (const index in bricksContainer.children){
     const child = bricksContainer.children[index];
     child.y += 1;
     child.rotation += 0.1 * delta;
   }
+
+
+  santaPerson.tilePosition.x += 1;
+  santaPerson.tilePosition.y += 1;
 
   newBricks = generateBricks();
   for(const key in newBricks){
@@ -70,9 +59,13 @@ app.ticker.add(function(delta) {
 
 });
 
+const santaPerson = generateSantaPerson();
+const bricksContainer = generateBricksContainer();
+const background = generateBackground();
 app.stage.addChild(background);
 app.stage.addChild(bricksContainer);
-app.stage.addChild(paddleItem);
+app.stage.addChild(santaPerson);
+
 drawLives();
 drawScore();
 

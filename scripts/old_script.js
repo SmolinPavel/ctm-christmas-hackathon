@@ -19,14 +19,6 @@ let rightPressedWithShift = false;
 let leftPressed = false;
 let leftPressedWithShift = false;
 
-const bricks = [];
-for (let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
-    }
-}
-
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -105,7 +97,7 @@ function drawPaddle() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
+    generateBricks();
     drawBall();
     drawPaddle();
     collisionDetection();

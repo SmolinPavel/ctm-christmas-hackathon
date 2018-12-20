@@ -15,14 +15,16 @@ const brickColumnCount = 5;
 
 //var container = new PIXI.Container();
 
-function drawBricks() {
-    var bricksContainer = new PIXI.Graphics();
-    for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-            bricksContainer.lineStyle(2, 0x000000, 1);
-            bricksContainer.beginFill(0x0095DD, 0.25);
-            bricksContainer.drawRect(c * (brickWidth + brickPadding) + brickOffsetLeft, r * (brickHeight + brickPadding) + brickOffsetTop, brickWidth, brickHeight, 15);
-            bricksContainer.endFill();
+function generateBricks() {
+    var bricksContainer = new PIXI.Container();
+    for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++){
+        for (let colIndex = 0; colIndex < brickColumnCount; colIndex++){
+            var brickContainer = new PIXI.Graphics();
+            brickContainer.lineStyle(2, 0x000000, 1);
+            brickContainer.beginFill(0x0095DD, 0.25);
+            brickContainer.drawRect(colIndex * (brickWidth + brickPadding) + brickOffsetLeft, rowIndex * (brickHeight + brickPadding) + brickOffsetTop, brickWidth, brickHeight, 15);
+            brickContainer.endFill();
+            bricksContainer.addChild(brickContainer);
         }
     }
     return bricksContainer;
@@ -62,7 +64,7 @@ function drawScore() {
     app.stage.addChild(richText);
 }
 
-var bricksContainer = drawBricks();
+var bricksContainer = generateBricks();
 
 app.ticker.add(function(delta) {
     bricksContainer.x += 0.1

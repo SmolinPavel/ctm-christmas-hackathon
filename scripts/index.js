@@ -65,9 +65,6 @@ function drawScore() {
 var bricksContainer = drawBricks();
 
 app.ticker.add(function(delta) {
-    // just for fun, let's rotate mr rabbit a little
-    // delta is 1 if running at 100% performance
-    // creates frame-independent transformation
     bricksContainer.x += 0.1
 });
 

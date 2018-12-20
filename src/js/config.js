@@ -21,9 +21,13 @@ const APP_WIDTH = 800;
 const APP_HEIGHT = 600;
 const APP_OFFSET_LEFT = 30;
 
-BRICK_BORDER_COLOR = 0x000000;
-BRICK_BACK_COLOR = 0x0095DD;
+const BRICK_BORDER_COLOR = 0x000000;
+const BRICK_BACK_COLOR = 0x0095DD;
 
-BOMB_URL = './assets/bomb.png';
-AXE_URL = './assets/axe.png';
-SANTA_URL = './assets/santas.png';
+const BOMB_URL = './assets/bomb.png';
+const AXE_URL = './assets/axe.png';
+const SANTA_URL = './assets/santas.png';
+
+const SANTA_WIDTH = 576/9;
+const SANTA_HEIGHT = 384/6;
+const SANTA_FRAMES_PER_SECOND = 0.1;

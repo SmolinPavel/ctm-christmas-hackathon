@@ -27,7 +27,15 @@ function drawLives() {
 function drawScore() {
   app.stage.addChild(generateUIText("Score: " + score,8, 0));
 }
-var count = 0;
+
+function getFrameX(frame_width, framePosition){
+  return frame_width * framePosition ;
+}
+
+function getFrameY(frame_height, framePosition){
+  return frame_height * Math.round(framePosition / 8);
+}
+
 app.ticker.add(function(delta) {
   if (rightPressed && santaPerson.x + santaPerson.width < APP_WIDTH) {
     santaPerson.x += 7;
@@ -45,9 +53,9 @@ app.ticker.add(function(delta) {
     child.tilePosition.x += 5;
   }
 
-
-  santaPerson.tilePosition.x += 1;
-  santaPerson.tilePosition.y += 1;
+  let delta_santa = Date.now() - start_generation_time;
+  santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
+  santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
 
   newBricks = generateBricks();
   for(const key in newBricks){

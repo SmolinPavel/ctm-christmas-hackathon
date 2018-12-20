@@ -4,6 +4,8 @@ document.body.appendChild(app.view);
 let lives = 3;
 let score = 0;
 
+let startGameTimestamp;
+
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
 let rightPressed = false;
@@ -11,11 +13,13 @@ let rightPressedWithShift = false;
 let leftPressed = false;
 let leftPressedWithShift = false;
 
-function getFrameX(frame_width, framePosition){
-  return frame_width * framePosition ;
+const startPage = generateStartPage();
+
+function getFrameX(frame_width, framePosition) {
+  return frame_width * framePosition;
 }
 
-function getFrameY(frame_height, framePosition){
+function getFrameY(frame_height, framePosition) {
   return frame_height * Math.round(framePosition / 8);
 }
 
@@ -54,10 +58,32 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                 bricksContainer.addChild(brick);
             }
         }
+
+        deltaUdpate = Date.now() - timeOfLastPartialUpdate;
+        if (startGameTimestamp && (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)) {
+            // TODO add cheap checks here
+            const secondsLeft = Math.floor(
+                GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
+            );
+            if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
+                alert("WIN");
+            } else {
+                document.getElementById("seconds").innerHTML = ("0" + secondsLeft).slice(-2);
+                timeOfLastPartialUpdate = Date.now();
+            }
+        }
     }
 }
 
+let deltaUdpate = 0;
+let timeOfLastPartialUpdate = 0;
+
+function loadStartPage() {
+	app.stage.addChild(startPage);
+}
+
 function loadGame() {
+  app.stage.removeChild(startPage);
   const santaPerson = generateSantaPerson();
   const bricksContainer = generateBricksContainer();
   const background = generateBackground();
@@ -74,6 +100,7 @@ function loadGame() {
 
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 
+  startGameTimestamp = Date.now();
 }
 
 function keyDownHandler(e) {
@@ -109,4 +136,8 @@ function mouseMoveHandler(e) {
   }
 }
 
-loadGame();
+function startGame(e) {
+	isStartGame = true;
+}
+
+loadStartPage();

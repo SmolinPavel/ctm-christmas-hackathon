@@ -33,7 +33,7 @@ function generateSantaPerson() {
 }
 
 function generateBomb(top) {
-  const texture = PIXI.Texture.fromImage('./assets/bomb.png');
+  const texture = PIXI.Texture.fromImage(BOMB_URL);
   const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
@@ -44,7 +44,7 @@ function generateBomb(top) {
 }
 
 function generateAxe(top) {
-  const texture = PIXI.Texture.fromImage('./assets/axe.png');
+  const texture = PIXI.Texture.fromImage(AXE_URL);
   const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
@@ -54,7 +54,7 @@ function generateAxe(top) {
 }
 
 function generateBackground() {
-  const texture = PIXI.Texture.fromImage('./assets/background_forest.png');
+  const texture = PIXI.Texture.fromImage(BACKGROUND_URL);
   const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
   return tilingSprite;
 }

@@ -62,7 +62,11 @@ function generateBackground() {
 }
 
 function generateStartPage() {
-	const texture = PIXI.Texture.fromImage(START_PAGE_URL);
+    document.addEventListener("keydown", startKeyDownHandler);
+
+
+
+    const texture = PIXI.Texture.fromImage(START_PAGE_URL);
 	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
 	sprite.interactive = true;
 	sprite.buttonMode = true;
@@ -76,6 +80,12 @@ function generateStartPage() {
 	return sprite;
   }
 
+  const startKeyDownHandler = ({ keyCode }) => {
+      if (keyCode === 13) {
+          loadGame();
+      }
+  }
+
 function generateUIText(text, x, y){
     const richText = new PIXI.Text(text, new PIXI.TextStyle(UI_TEXT_STYLE));
     richText.x = x;
@@ -83,6 +93,6 @@ function generateUIText(text, x, y){
     return richText
 }
 
-function onClickStartPageHandler () {
+function onClickStartPageHandler (e) {
 	loadGame();
 }

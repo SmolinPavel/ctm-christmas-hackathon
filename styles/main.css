@@ -7,12 +7,22 @@ body {
   height: 100vh;
   background: linear-gradient(
     325deg,
-    rgb(255, 176, 238) 0,
+    rgb(123, 189, 175) 0,
     rgb(237, 241, 245) 100%
   );
-  display: flex;
-  align-items: center;
 }
+
+header {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  color: #42a1b5;
+  font-size: 30px;
+}
+
+/* #countdown {
+  display: none;
+} */
 
 canvas {
   background: #eee;

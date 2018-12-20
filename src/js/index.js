@@ -46,7 +46,7 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                     }
                     bricksContainer.children.splice(index, 1);
                 } else {
-                    child.y += 1;
+                    child.y += 5;
                     child.rotation += 0.05 * delta;
                 }
             }
@@ -165,7 +165,8 @@ function mouseMoveHandler(e) {
 
 function gameOver(santaPerson, bricksContainer, background) {
   startGameTimestamp = null;
-  const gameOverPage = generateGameOverPage();
+    document.getElementById("countdown").innerHTML = "";
+    const gameOverPage = generateGameOverPage(() => window.location.reload());
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
   app.stage.removeChild(santaPerson);
@@ -173,8 +174,9 @@ function gameOver(santaPerson, bricksContainer, background) {
 }
 
 function finishGame(santaPerson, bricksContainer, background) {
-  startGameTimestamp = null;
-  const finishGamePage = generateFinishPage();
+    document.getElementById("countdown").innerHTML = "";
+    startGameTimestamp = null;
+  const finishGamePage = generateFinishPage(() => window.location.reload());
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
   app.stage.removeChild(santaPerson);

@@ -1,13 +1,13 @@
 let last_generation_time = 0;
 let start_generation_time = Date.now();
-let delta_treshold = 4000;
+let delta_treshold = 1000;
 
 function generateBricks() {
   const now = Date.now();
   const delta = now - last_generation_time;
   let outcome = [];
   if ((delta > delta_treshold) || (last_generation_time === 0)){
-    delta_treshold = Math.max(delta_treshold * 0.95, 2000);
+    delta_treshold = Math.max(delta_treshold * 0.95, 100);
     last_generation_time = now;
     game_time_in_sec = (now - start_generation_time) / 1000;
     if (Math.random() > 0.5) {
@@ -61,34 +61,27 @@ function generateBackground() {
   return tilingSprite;
 }
 
-function generateStartPage(onFinishSceneHandler) {
-    document.addEventListener("keydown", startKeyDownHandler);
+const generateStartPage = callback => generatePage(START_PAGE_URL, callback);
+const generateFinishPage = callback => generatePage(FINISH_PAGE_URL, callback);
+const generateGameOverPage = callback => generatePage(GAME_OVER_PAGE_URL, callback);
 
-    const texture = PIXI.Texture.fromImage(START_PAGE_URL);
-	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
-	sprite.interactive = true;
-	sprite.buttonMode = true;
-	sprite.on('pointerdown', function (){
-	  sprite.parent.removeChild(sprite);
-      onFinishSceneHandler();
+const startKeyDownHandler = ({ keyCode }, sprite, callback) => {
+    if (keyCode === 13) {
+        sprite.parent.removeChild(sprite);
+        callback();
+    }
+};
+
+const generatePage = (pageUrl, callback) => {
+    const texture = PIXI.Texture.fromImage(pageUrl);
+    const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
+    document.addEventListener("keydown", (e) => startKeyDownHandler(e, sprite, callback));
+    sprite.interactive = true;
+    sprite.buttonMode = true;
+    sprite.on('pointerdown', function (e){
+        sprite.parent.removeChild(sprite);
+        callback();
     });
-	return sprite;
-  }
 
-  function generateFinishPage() {
-	const texture = PIXI.Texture.fromImage(FINISH_PAGE_URL);
-	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
-	return sprite;
-  }
-
-  function generateGameOverPage() {
-	const texture = PIXI.Texture.fromImage(GAME_OVER_PAGE_URL);
-	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
-	return sprite;
-  }
-
-  const startKeyDownHandler = ({ keyCode }) => {
-      if (keyCode === 13) {
-          loadGame();
-      }
-  };
+    return sprite;
+};

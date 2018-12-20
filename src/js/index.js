@@ -75,14 +75,16 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
       (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
     ) {
       // TODO add cheap checks here
-      const secondsLeft = Math.floor(
+      const secondsLeft = Math.ceil(
         GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
       );
       if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
         finishGame();
       } else {
-        document.getElementById("minutes").innerHTML = "0:";
-        document.getElementById("seconds").innerHTML = `0${secondsLeft}`.slice(
+        const minutes = Math.floor(secondsLeft/60);
+        const seconds = secondsLeft % 60;
+        document.getElementById("minutes").innerHTML = `${minutes}:`;
+        document.getElementById("seconds").innerHTML = `0${seconds}`.slice(
           -2
         );
         timeOfLastPartialUpdate = Date.now();
@@ -111,6 +113,11 @@ function loadGame() {
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 
   startGameTimestamp = Date.now();
+  const ifrm = document.createElement("iframe");
+  ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/371455856&color=%23ff5500&auto_play=true");
+  ifrm.setAttribute("style", "opacity: 0;")
+  setTimeout(() => document.body.appendChild(ifrm), 1000);
+
 }
 
 function keyDownHandler(e) {
@@ -129,6 +136,7 @@ function mouseMoveHandler(e) {
 }
 
 function gameOver() {
+  startGameTimestamp = null;
   const gameOverPage = generateGameOverPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
@@ -137,6 +145,7 @@ function gameOver() {
 }
 
 function finishGame() {
+  startGameTimestamp = null;
   const finishGamePage = generateFinishPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);

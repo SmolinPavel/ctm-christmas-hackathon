@@ -12,6 +12,9 @@ const emptyKeybEvent =  {shiftKey : false, keyCode:0};
 let lastKeybEvent = emptyKeybEvent;
 
 const startPage = generateStartPage();
+const santaPerson = generateSantaPerson();
+const bricksContainer = generateBricksContainer();
+const background = generateBackground();
 
 function getFrameX(frame_width, framePosition) {
   return -frame_width * framePosition;
@@ -43,7 +46,7 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
             const child = bricksContainer.children[index];
             if (child.y > APP_HEIGHT) {
                 if (Math.abs(child.x - santaPerson.x) < 100) {
-                    alert("Smash it!");
+                    gameOver();
                 }
                 bricksContainer.children.splice(index, 1);
             } else {
@@ -66,35 +69,37 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
             }
         }
 
-        deltaUdpate = Date.now() - timeOfLastPartialUpdate;
-        if (startGameTimestamp && (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)) {
-            // TODO add cheap checks here
-            const secondsLeft = Math.floor(
-                GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
-            );
-            if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
-                alert("WIN");
-            } else {
-                document.getElementById("minutes").innerHTML = '0:';
-                document.getElementById("seconds").innerHTML = (`0${secondsLeft}`).slice(-2);
-                timeOfLastPartialUpdate = Date.now();
-            }
-        }
+    deltaUdpate = Date.now() - timeOfLastPartialUpdate;
+    if (
+      startGameTimestamp &&
+      (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
+    ) {
+      // TODO add cheap checks here
+      const secondsLeft = Math.floor(
+        GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
+      );
+      if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
+        finishGame();
+      } else {
+        document.getElementById("minutes").innerHTML = "0:";
+        document.getElementById("seconds").innerHTML = `0${secondsLeft}`.slice(
+          -2
+        );
+        timeOfLastPartialUpdate = Date.now();
+      }
     }
+  };
 }
 
 let deltaUdpate = 0;
 let timeOfLastPartialUpdate = 0;
 
 function loadStartPage() {
-	app.stage.addChild(startPage);
+  app.stage.addChild(startPage);
 }
 
 function loadGame() {
   app.stage.removeChild(startPage);
-  const santaPerson = generateSantaPerson();
-  const bricksContainer = generateBricksContainer();
-  const background = generateBackground();
   app.stage.addChild(background);
   app.stage.addChild(bricksContainer);
   app.stage.addChild(santaPerson);
@@ -102,9 +107,6 @@ function loadGame() {
   document.addEventListener("keydown", keyDownHandler);
   document.addEventListener("keyup", keyUpHandler);
   document.addEventListener("mousemove", mouseMoveHandler);
-
-  // app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
-  // app.stage.addChild(generateUIText("Score: " + score,8, 0));
 
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 
@@ -126,8 +128,20 @@ function mouseMoveHandler(e) {
   }
 }
 
-function startGame(e) {
-	isStartGame = true;
+function gameOver() {
+  const gameOverPage = generateGameOverPage();
+  app.stage.removeChild(background);
+  app.stage.removeChild(bricksContainer);
+  app.stage.removeChild(santaPerson);
+  app.stage.addChild(gameOverPage);
+}
+
+function finishGame() {
+  const finishGamePage = generateFinishPage();
+  app.stage.removeChild(background);
+  app.stage.removeChild(bricksContainer);
+  app.stage.removeChild(santaPerson);
+  app.stage.addChild(finishGamePage);
 }
 
 loadStartPage();

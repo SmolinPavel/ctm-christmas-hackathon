@@ -62,12 +62,34 @@ function generateBackground() {
 }
 
 function generateStartPage() {
-	const texture = PIXI.Texture.fromImage(START_PAGE_URL);
+    document.addEventListener("keydown", startKeyDownHandler);
+
+
+
+    const texture = PIXI.Texture.fromImage(START_PAGE_URL);
 	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
 	sprite.interactive = true;
 	sprite.buttonMode = true;
-	sprite.on('pointerdown', onClick);
+	sprite.on('pointerdown', onClickStartPageHandler);
 	return sprite;
+  }
+
+  function generateFinishPage() {
+	const texture = PIXI.Texture.fromImage(FINISH_PAGE_URL);
+	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
+	return sprite;
+  }
+
+  function generateGameOverPage() {
+	const texture = PIXI.Texture.fromImage(GAME_OVER_PAGE_URL);
+	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
+	return sprite;
+  }
+
+  const startKeyDownHandler = ({ keyCode }) => {
+      if (keyCode === 13) {
+          loadGame();
+      }
   }
 
 function generateUIText(text, x, y){
@@ -77,6 +99,6 @@ function generateUIText(text, x, y){
     return richText
 }
 
-function onClick () {
+function onClickStartPageHandler (e) {
 	loadGame();
 }

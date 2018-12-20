@@ -1,5 +1,5 @@
 const APP_CONFIG = {
-    backgroundColor: 0x9f9f9f
+  backgroundColor: 0xffffff,
 };
 const UI_TEXT_STYLE = {
     fontFamily: "Arial",
@@ -27,6 +27,7 @@ const BRICK_BACK_COLOR = 0x0095DD;
 const BOMB_URL = './assets/bomb.png';
 const AXE_URL = './assets/axe.png';
 const SANTA_URL = './assets/santas.png';
+const BACKGROUND_URL = './assets/background_forest.png';
 
 const SANTA_WIDTH = 576/9;
 const SANTA_HEIGHT = 384/6;

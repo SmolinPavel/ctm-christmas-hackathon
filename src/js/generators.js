@@ -21,7 +21,7 @@ function generateBricks() {
 }
 
 function generateBricksContainer(){
-    return new PIXI.Container();
+  return new PIXI.Container();
 }
 
 function generateSantaPerson() {
@@ -34,7 +34,7 @@ function generateSantaPerson() {
 
 function generateBomb(top) {
   const texture = PIXI.Texture.fromImage(BOMB_URL);
-  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
+  const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);
@@ -45,7 +45,7 @@ function generateBomb(top) {
 
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage(AXE_URL);
-  const sprite = new PIXI.TilingSprite(texture, texture.width, texture.height);
+  const sprite = new PIXI.Sprite(texture);
   sprite.x = Math.random() * APP_WIDTH;
   sprite.y = top;
   sprite.anchor.set(0.5);
@@ -53,6 +53,11 @@ function generateAxe(top) {
   return sprite;
 }
 
+function generateBackground() {
+  const texture = PIXI.Texture.fromImage(BACKGROUND_URL);
+  const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
+  return tilingSprite;
+}
 function generateUIText(text, x, y){
     const richText = new PIXI.Text(text, getTextStyle());
     richText.x = x;

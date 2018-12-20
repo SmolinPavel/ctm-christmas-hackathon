@@ -50,7 +50,6 @@ app.ticker.add(function(delta) {
     const child = bricksContainer.children[index];
     child.y += 1;
     child.rotation += 0.1 * delta;
-    child.tilePosition.x += 5;
   }
 
   let delta_santa = Date.now() - start_generation_time;
@@ -69,8 +68,11 @@ app.ticker.add(function(delta) {
 
 const santaPerson = generateSantaPerson();
 const bricksContainer = generateBricksContainer();
+const background = generateBackground();
+app.stage.addChild(background);
 app.stage.addChild(bricksContainer);
 app.stage.addChild(santaPerson);
+
 drawLives();
 drawScore();
 

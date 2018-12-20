@@ -1,20 +1,12 @@
 const app = new PIXI.Application(APP_WIDTH, APP_HEIGHT, APP_CONFIG);
 document.body.appendChild(app.view);
 
-let lives = 3;
-let score = 0;
-
 let startGameTimestamp;
 
 const paddleWidth = 75;
 let paddleX = (APP_WIDTH - paddleWidth) / 2;
 const emptyKeybEvent =  {shiftKey : false, keyCode:0};
 let lastKeybEvent = emptyKeybEvent;
-
-const startPage = generateStartPage();
-const santaPerson = generateSantaPerson();
-const bricksContainer = generateBricksContainer();
-const background = generateBackground();
 
 function getFrameX(frame_width, framePosition) {
   return -frame_width * framePosition;
@@ -29,10 +21,10 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
         const halfOfSanta = santaPerson.width / 2;
         let speed =  lastKeybEvent.shiftKey ? 21 : 7;
         let turn = 0;
-        if (lastKeybEvent.keyCode === 39){
+        if (lastKeybEvent.key === "ArrowRight"){
             turn = 1;
         }
-        else if (lastKeybEvent.keyCode === 37){
+        else if (lastKeybEvent.key === "ArrowLeft"){
             turn = -1;
         }
         if (turn !== 0) {
@@ -46,7 +38,8 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
             const child = bricksContainer.children[index];
             if (child.y > APP_HEIGHT) {
                 if (Math.abs(child.x - santaPerson.x) < 100) {
-                    gameOver();
+                    app.ticker.remove(update);
+                    gameOver(santaPerson, bricksContainer, background);
                 }
                 bricksContainer.children.splice(index, 1);
             } else {
@@ -95,11 +88,13 @@ let deltaUdpate = 0;
 let timeOfLastPartialUpdate = 0;
 
 function loadStartPage() {
-  app.stage.addChild(startPage);
+  app.stage.addChild(generateStartPage(loadGame));
 }
 
 function loadGame() {
-  app.stage.removeChild(startPage);
+  const santaPerson = generateSantaPerson();
+  const bricksContainer = generateBricksContainer();
+  const background = generateBackground();
   app.stage.addChild(background);
   app.stage.addChild(bricksContainer);
   app.stage.addChild(santaPerson);
@@ -114,11 +109,24 @@ function loadGame() {
 }
 
 function keyDownHandler(e) {
-  lastKeybEvent = e;
+    if (["ArrowRight", "ArrowLeft"].indexOf(e.key) !== -1){
+        lastKeybEvent = e;
+    }
+    else{
+        lastKeybEvent = {
+            key : lastKeybEvent.key,
+            shiftKey : e.shiftKey
+        };
+    }
 }
 
 function keyUpHandler(e) {
-  lastKeybEvent = emptyKeybEvent;
+    if (["ArrowRight", "ArrowLeft"].indexOf(e.key) !== -1){
+        lastKeybEvent = {
+            key : "",
+            shiftKey : e.shiftKey
+        };
+    }
 }
 
 function mouseMoveHandler(e) {
@@ -128,7 +136,7 @@ function mouseMoveHandler(e) {
   }
 }
 
-function gameOver() {
+function gameOver(santaPerson, bricksContainer, background) {
   const gameOverPage = generateGameOverPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
@@ -136,7 +144,7 @@ function gameOver() {
   app.stage.addChild(gameOverPage);
 }
 
-function finishGame() {
+function finishGame(santaPerson, bricksContainer, background) {
   const finishGamePage = generateFinishPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);

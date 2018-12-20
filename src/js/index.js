@@ -25,14 +25,14 @@ function drawLives() {
 }
 
 function drawScore() {
-  app.stage.addChild(generateUIText("Score: " + score,8, 0));
+  app.stage.addChild(generateUIText("Score: " + score, 8, 0));
 }
 
-function getFrameX(frame_width, framePosition){
-  return frame_width * framePosition ;
+function getFrameX(frame_width, framePosition) {
+  return frame_width * framePosition;
 }
 
-function getFrameY(frame_height, framePosition){
+function getFrameY(frame_height, framePosition) {
   return frame_height * Math.round(framePosition / 8);
 }
 
@@ -49,19 +49,25 @@ app.ticker.add(function(delta) {
   for (const index in bricksContainer.children) {
     const child = bricksContainer.children[index];
     if (child.y > APP_HEIGHT) {
-        if (Math.abs(child.x - santaPerson.x) < 100) {
-            alert("Smash it!");
-        }
-        bricksContainer.children.splice(index, 1);
+      if (Math.abs(child.x - santaPerson.x) < 100) {
+        alert("Smash it!");
+      }
+      bricksContainer.children.splice(index, 1);
     } else {
-        child.y += 1;
-        child.rotation += 0.1 * delta;
+      child.y += 1;
+      child.rotation += 0.1 * delta;
     }
   }
 
   let delta_santa = Date.now() - start_generation_time;
-  santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
-  santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
+  santaPerson.tilePosition.x = getFrameX(
+    SANTA_WIDTH,
+    Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND)
+  );
+  santaPerson.tilePosition.y = getFrameY(
+    SANTA_HEIGHT,
+    Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND)
+  );
 
   newBricks = generateBricks();
   for (const key in newBricks) {
@@ -70,7 +76,24 @@ app.ticker.add(function(delta) {
       bricksContainer.addChild(brick);
     }
   }
+
+  deltaUdpate = Date.now() - timeOfLastPartialUpdate;
+  if (deltaUdpate > 250 || timeOfLastPartialUpdate === 0) {
+    // TODO add cheap checks here
+    const t = Math.floor(
+      GAME_COUNTDOWN_SECONDS + (start_generation_time - Date.now()) / 1000
+    );
+    if (t <= 0 && timeOfLastPartialUpdate !== 0) {
+      alert("WIN");
+    } else {
+      document.getElementById("seconds").innerHTML = ("0" + t).slice(-2);
+      timeOfLastPartialUpdate = Date.now();
+    }
+  }
 });
+
+let deltaUdpate = 0;
+let timeOfLastPartialUpdate = 0;
 
 const santaPerson = generateSantaPerson();
 const bricksContainer = generateBricksContainer();
@@ -79,8 +102,8 @@ app.stage.addChild(background);
 app.stage.addChild(bricksContainer);
 app.stage.addChild(santaPerson);
 
-drawLives();
-drawScore();
+// drawLives();
+// drawScore();
 
 document.addEventListener("keydown", keyDownHandler);
 document.addEventListener("keyup", keyUpHandler);

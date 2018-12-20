@@ -39,7 +39,7 @@ function generateBomb(top) {
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
-
+  attachSparckles(sprite);
   return sprite;
 }
 

@@ -55,12 +55,27 @@ function generateAxe(top) {
 
 function generateBackground() {
   const texture = PIXI.Texture.fromImage(BACKGROUND_URL);
-  const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
+  const tilingSprite = new PIXI.extras.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
+  tilingSprite.alpha = 0.4;
   return tilingSprite;
 }
+
+function generateStartPage() {
+	const texture = PIXI.Texture.fromImage(START_PAGE_URL);
+	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
+	sprite.interactive = true;
+	sprite.buttonMode = true;
+	sprite.on('pointerdown', onClick);
+	return sprite;
+  }
+
 function generateUIText(text, x, y){
-    const richText = new PIXI.Text(text, getTextStyle());
+    const richText = new PIXI.Text(text, new PIXI.TextStyle(UI_TEXT_STYLE));
     richText.x = x;
     richText.y = y;
     return richText
+}
+
+function onClick () {
+	loadGame();
 }

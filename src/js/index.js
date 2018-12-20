@@ -60,30 +60,32 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                     }
                 }
 
-                deltaUdpate = Date.now() - timeOfLastPartialUpdate;
-                if (
-                    startGameTimestamp &&
-                    (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
-                ) {
-                    // TODO add cheap checks here
-                    const secondsLeft = Math.floor(
-                        GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
+            deltaUdpate = Date.now() - timeOfLastPartialUpdate;
+            if (
+                startGameTimestamp &&
+                (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
+            ) {
+                // TODO add cheap checks here
+                const secondsLeft = Math.ceil(
+                    GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
+                );
+                if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
+                    finishGame();
+                } else {
+                    const minutes = Math.floor(secondsLeft/60);
+                    const seconds = secondsLeft % 60;
+                    document.getElementById("minutes").innerHTML = `${minutes}:`;
+                    document.getElementById("seconds").innerHTML = `0${seconds}`.slice(
+                        -2
                     );
-                    if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
-                        finishGame();
-                    } else {
-                        document.getElementById("minutes").innerHTML = "0:";
-                        document.getElementById("seconds").innerHTML = `0${secondsLeft}`.slice(
-                            -2
-                        );
-                        timeOfLastPartialUpdate = Date.now();
-                    }
+                    timeOfLastPartialUpdate = Date.now();
                 }
-            } else {
-                if ((Date.now() - santaDiedTime) > 3000) {
-                    app.ticker.remove(update);
-                    gameOver(santaPerson, bricksContainer, background);
-                }
+            }
+        }
+        else{
+            if ((Date.now() - santaDiedTime) > 3000){
+                app.ticker.remove(update);
+                gameOver(santaPerson, bricksContainer, background);
             }
         }
 
@@ -126,7 +128,12 @@ function loadGame() {
 
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 
-  startGameTimestamp = Date.now();   
+  startGameTimestamp = Date.now();
+  const ifrm = document.createElement("iframe");
+  ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/371455856&color=%23ff5500&auto_play=true");
+  ifrm.setAttribute("style", "opacity: 0;")
+  setTimeout(() => document.body.appendChild(ifrm), 1000);
+
 }
 
 function keyDownHandler(e) {
@@ -162,6 +169,7 @@ function mouseMoveHandler(e) {
 }
 
 function gameOver(santaPerson, bricksContainer, background) {
+  startGameTimestamp = null;
   const gameOverPage = generateGameOverPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
@@ -170,6 +178,7 @@ function gameOver(santaPerson, bricksContainer, background) {
 }
 
 function finishGame(santaPerson, bricksContainer, background) {
+  startGameTimestamp = null;
   const finishGamePage = generateFinishPage();
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);

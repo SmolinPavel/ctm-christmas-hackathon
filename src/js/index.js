@@ -53,22 +53,28 @@ app.ticker.add(function(delta) {
   } else if (leftPressedWithShift && rightNullX > 0) {
     paddleItem.x -= 21;
   }
-  for (const index in bricksContainer.children){
+  for (const index in bricksContainer.children) {
     const child = bricksContainer.children[index];
-    child.y += 1;
-    child.rotation += 0.1 * delta;
-    child.tilePosition.x += 5;
 
+    if (child.y > APP_HEIGHT) {
+      if (Math.abs(child.x - paddleItem.x) < 100) {
+        alert("Smash it!");
+      }
+      bricksContainer.children.splice(index, 1);
+    } else {
+      child.y += 1;
+      child.rotation += 0.1 * delta;
+      child.tilePosition.x += 5;
+    }
   }
 
   newBricks = generateBricks();
-  for(const key in newBricks){
+  for (const key in newBricks) {
     if (newBricks.hasOwnProperty(key)) {
       const brick = newBricks[key];
       bricksContainer.addChild(brick);
     }
   }
-
 });
 
 app.stage.addChild(bricksContainer);

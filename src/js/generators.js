@@ -56,6 +56,7 @@ function generateAxe(top) {
 function generateBackground() {
   const texture = PIXI.Texture.fromImage(BACKGROUND_URL);
   const tilingSprite = new PIXI.TilingSprite(texture, APP_WIDTH, APP_HEIGHT);
+  tilingSprite.alpha = 0.4;
   return tilingSprite;
 }
 function generateUIText(text, x, y){

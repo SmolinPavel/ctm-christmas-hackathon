@@ -62,7 +62,7 @@ app.ticker.add(function(delta) {
   let delta_santa = Date.now() - start_generation_time;
   santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
   santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
-
+  background.tilePosition.y  += 1;
   newBricks = generateBricks();
   for (const key in newBricks) {
     if (newBricks.hasOwnProperty(key)) {

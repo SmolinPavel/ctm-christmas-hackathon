@@ -68,7 +68,8 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
             if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
                 alert("WIN");
             } else {
-                document.getElementById("seconds").innerHTML = ("0" + secondsLeft).slice(-2);
+                document.getElementById("minutes").innerHTML = '0:';
+                document.getElementById("seconds").innerHTML = (`${secondsLeft}`);
                 timeOfLastPartialUpdate = Date.now();
             }
         }
@@ -95,8 +96,8 @@ function loadGame() {
   document.addEventListener("keyup", keyUpHandler);
   document.addEventListener("mousemove", mouseMoveHandler);
 
-  app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
-  app.stage.addChild(generateUIText("Score: " + score,8, 0));
+  // app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
+  // app.stage.addChild(generateUIText("Score: " + score,8, 0));
 
   app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 

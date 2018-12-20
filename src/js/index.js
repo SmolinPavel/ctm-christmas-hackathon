@@ -1,6 +1,4 @@
-const app = new PIXI.Application(APP_WIDTH, APP_HEIGHT, {
-  backgroundColor: 0x9f9f9f
-});
+const app = new PIXI.Application(APP_WIDTH, APP_HEIGHT, APP_CONFIG);
 document.body.appendChild(app.view);
 
 let lives = 3;
@@ -25,23 +23,7 @@ let leftPressed = false;
 let leftPressedWithShift = false;
 
 function getTextStyle() {
-  const style = new PIXI.TextStyle({
-    fontFamily: "Arial",
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    fill: ["#0095DD"], //, '#00ff99'], // gradient
-    //stroke: '#4a1850',
-    //strokeThickness: 5,
-    //dropShadow: true,
-    //dropShadowColor: '#000000',
-    //dropShadowBlur: 4,
-    // dropShadowAngle: Math.PI / 6,
-    //dropShadowDistance: 6,
-    wordWrap: true
-    //wordWrapWidth: 440
-  });
-  return style;
+  return new PIXI.TextStyle(UI_TEXT_STYLE);
 }
 
 function drawLives() {

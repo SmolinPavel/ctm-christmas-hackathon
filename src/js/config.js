@@ -28,6 +28,7 @@ const BOMB_URL = './assets/bomb.png';
 const AXE_URL = './assets/axe.png';
 const SANTA_URL = './assets/santas.png';
 const BACKGROUND_URL = './assets/background_forest.png';
+const START_PAGE_URL = './assets/start_picture.jpg';
 
 const SANTA_WIDTH = 576/9;
 const SANTA_HEIGHT = 384/6;

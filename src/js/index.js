@@ -11,6 +11,8 @@ let rightPressedWithShift = false;
 let leftPressed = false;
 let leftPressedWithShift = false;
 
+const startPage = generateStartPage();
+
 function getFrameX(frame_width, framePosition){
   return frame_width * framePosition ;
 }
@@ -57,8 +59,12 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
     }
 }
 
+function loadStartPage() {
+	app.stage.addChild(startPage); 
+}
 
 function loadGame() {
+  app.stage.removeChild(startPage);
   const santaPerson = generateSantaPerson();
   const bricksContainer = generateBricksContainer();
   const background = generateBackground();
@@ -109,4 +115,8 @@ function mouseMoveHandler(e) {
   }
 }
 
-loadGame();
+function startGame(e) {
+	isStartGame = true;
+}
+
+loadStartPage();

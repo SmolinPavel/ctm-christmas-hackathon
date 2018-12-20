@@ -19,41 +19,43 @@ function getFrameY(frame_height, framePosition){
   return frame_height * Math.round(framePosition / 8);
 }
 
-app.ticker.add(function(delta) {
-  if (rightPressed && santaPerson.x + santaPerson.width < APP_WIDTH) {
-    santaPerson.x += 7;
-  } else if (leftPressed && santaPerson.x > 0) {
-    santaPerson.x -= 7;
-  } else if (rightPressedWithShift && rightNullX < APP_WIDTH - paddleWidth) {
-    santaPerson.x += 21;
-  } else if (leftPressedWithShift && rightNullX > 0) {
-    santaPerson.x -= 21;
-  }
-  for (const index in bricksContainer.children) {
-    const child = bricksContainer.children[index];
-    if (child.y > APP_HEIGHT) {
-        if (Math.abs(child.x - santaPerson.x) < 100) {
-            alert("Smash it!");
+function wrapUpdate(santaPerson, bricksContainer, background) {
+    return function update(delta) {
+        if (rightPressed && santaPerson.x + santaPerson.width < APP_WIDTH) {
+            santaPerson.x += 7;
+        } else if (leftPressed && santaPerson.x > 0) {
+            santaPerson.x -= 7;
+        } else if (rightPressedWithShift && rightNullX < APP_WIDTH - paddleWidth) {
+            santaPerson.x += 21;
+        } else if (leftPressedWithShift && rightNullX > 0) {
+            santaPerson.x -= 21;
         }
-        bricksContainer.children.splice(index, 1);
-    } else {
-        child.y += 1;
-        child.rotation += 0.1 * delta;
-    }
-  }
+        for (const index in bricksContainer.children) {
+            const child = bricksContainer.children[index];
+            if (child.y > APP_HEIGHT) {
+                if (Math.abs(child.x - santaPerson.x) < 100) {
+                    alert("Smash it!");
+                }
+                bricksContainer.children.splice(index, 1);
+            } else {
+                child.y += 1;
+                child.rotation += 0.1 * delta;
+            }
+        }
 
-  let delta_santa = Date.now() - start_generation_time;
-  santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
-  santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
-  background.tilePosition.y  += 1;
-  newBricks = generateBricks();
-  for (const key in newBricks) {
-    if (newBricks.hasOwnProperty(key)) {
-      const brick = newBricks[key];
-      bricksContainer.addChild(brick);
+        let delta_santa = Date.now() - start_generation_time;
+        santaPerson.tilePosition.x = getFrameX(SANTA_WIDTH, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
+        santaPerson.tilePosition.y = getFrameY(SANTA_HEIGHT, Math.round(delta_santa / 1000 / SANTA_FRAMES_PER_SECOND));
+        background.tilePosition.y += 1;
+        const newBricks = generateBricks();
+        for (const key in newBricks) {
+            if (newBricks.hasOwnProperty(key)) {
+                const brick = newBricks[key];
+                bricksContainer.addChild(brick);
+            }
+        }
     }
-  }
-});
+}
 
 
 function loadGame() {
@@ -70,6 +72,8 @@ function loadGame() {
 
   app.stage.addChild(generateUIText("Lives: " + lives, 400, 0));
   app.stage.addChild(generateUIText("Score: " + score,8, 0));
+
+  app.ticker.add(wrapUpdate(santaPerson, bricksContainer, background));
 }
 
 function keyDownHandler(e) {

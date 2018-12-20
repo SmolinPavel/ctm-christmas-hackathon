@@ -27,8 +27,9 @@ function generateBricksContainer(){
 function generateSantaPerson() {
   const texture = PIXI.Texture.fromImage(SANTA_URL);
   const santa = new PIXI.extras.TilingSprite(texture, SANTA_WIDTH, SANTA_HEIGHT);
-  santa.y = app.screen.height - SANTA_HEIGHT;
+  santa.y = app.screen.height - SANTA_HEIGHT / 2;
   santa.x = app.screen.width / 2 - SANTA_WIDTH / 2;
+  santa.anchor.set(0.5);
   return santa;
 }
 
@@ -65,7 +66,13 @@ function generateStartPage() {
 	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
 	sprite.interactive = true;
 	sprite.buttonMode = true;
-	sprite.on('pointerdown', onClick);
+	sprite.on('pointerdown', onClickStartPageHandler);
+	return sprite;
+  }
+
+  function generateGameOverPage() {
+	const texture = PIXI.Texture.fromImage(GAME_OVER_PAGE_URL);
+	const sprite = new PIXI.Sprite(texture, APP_WIDTH, APP_HEIGHT);
 	return sprite;
   }
 
@@ -76,6 +83,6 @@ function generateUIText(text, x, y){
     return richText
 }
 
-function onClick () {
+function onClickStartPageHandler () {
 	loadGame();
 }

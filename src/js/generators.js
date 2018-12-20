@@ -1,5 +1,5 @@
 function generateBricks() {
-
+  const bricksContainer = new PIXI.Container();
   bricksContainer.addChild(generateBomb());
   bricksContainer.addChild(generateAxe());
   return bricksContainer;

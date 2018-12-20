@@ -42,7 +42,7 @@ app.ticker.add(function(delta) {
   for (const index in bricksContainer.children) {
     const child = bricksContainer.children[index];
     if (child.y > APP_HEIGHT) {
-        if (Math.abs(child.x - paddleItem.x) < 100) {
+        if (Math.abs(child.x - santaPerson.x) < 100) {
             alert("Smash it!");
         }
         bricksContainer.children.splice(index, 1);

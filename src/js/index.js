@@ -8,6 +8,7 @@ let paddleX = (APP_WIDTH - paddleWidth) / 2;
 const emptyKeybEvent =  {shiftKey : false, keyCode:0};
 let lastKeybEvent = emptyKeybEvent;
 let santaDiedTime = 0;
+let paused = false;
 
 function getFrameX(frame_width, framePosition) {
   return -frame_width * framePosition;
@@ -20,69 +21,69 @@ function getFrameY(frame_height, framePosition) {
 function wrapUpdate(santaPerson, bricksContainer, background) {
     return function update(delta) {
 
-        if (santaDiedTime === 0){
-            const halfOfSanta = santaPerson.width / 2;
-            let speed =  lastKeybEvent.shiftKey ? 21 : 7;
-            let turn = 0;
-            if (lastKeybEvent.key === "ArrowRight"){
-                turn = 1;
-            }
-            else if (lastKeybEvent.key === "ArrowLeft"){
-                turn = -1;
-            }
-            if (turn !== 0) {
-                speed *= turn;
-                santaPerson.scale.set(-turn, 1);
-                let rightCorellation = Math.min(santaPerson.x + speed, APP_WIDTH - halfOfSanta);
-                santaPerson.x = Math.max(rightCorellation, halfOfSanta);
-            }
+        if (!paused) {
+            if (santaDiedTime === 0) {
+                const halfOfSanta = santaPerson.width / 2;
+                let speed = lastKeybEvent.shiftKey ? 21 : 7;
+                let turn = 0;
+                if (lastKeybEvent.key === "ArrowRight") {
+                    turn = 1;
+                } else if (lastKeybEvent.key === "ArrowLeft") {
+                    turn = -1;
+                }
+                if (turn !== 0) {
+                    speed *= turn;
+                    santaPerson.scale.set(-turn, 1);
+                    let rightCorellation = Math.min(santaPerson.x + speed, APP_WIDTH - halfOfSanta);
+                    santaPerson.x = Math.max(rightCorellation, halfOfSanta);
+                }
 
-            for (const index in bricksContainer.children) {
-                const child = bricksContainer.children[index];
-                if (child.y > APP_HEIGHT) {
-                    if (Math.abs(child.x - santaPerson.x) < 100) {
-                        santaDiedTime = Date.now();
+                for (const index in bricksContainer.children) {
+                    const child = bricksContainer.children[index];
+                    if (child.y > APP_HEIGHT) {
+                        if (Math.abs(child.x - santaPerson.x) < 100) {
+                            santaDiedTime = Date.now();
 
+                        }
+                        bricksContainer.children.splice(index, 1);
+                    } else {
+                        child.y += 1;
+                        child.rotation += 0.05 * delta;
                     }
-                    bricksContainer.children.splice(index, 1);
-                } else {
-                    child.y += 1;
-                    child.rotation += 0.05 * delta;
                 }
-            }
-            background.tilePosition.y += 1;
-            const newBricks = generateBricks();
-            for (const key in newBricks) {
-                if (newBricks.hasOwnProperty(key)) {
-                    const brick = newBricks[key];
-                    bricksContainer.addChild(brick);
+                background.tilePosition.y += 1;
+                const newBricks = generateBricks();
+                for (const key in newBricks) {
+                    if (newBricks.hasOwnProperty(key)) {
+                        const brick = newBricks[key];
+                        bricksContainer.addChild(brick);
+                    }
                 }
-            }
 
-            deltaUdpate = Date.now() - timeOfLastPartialUpdate;
-            if (
-                startGameTimestamp &&
-                (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
-            ) {
-                // TODO add cheap checks here
-                const secondsLeft = Math.floor(
-                    GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
-                );
-                if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
-                    finishGame();
-                } else {
-                    document.getElementById("minutes").innerHTML = "0:";
-                    document.getElementById("seconds").innerHTML = `0${secondsLeft}`.slice(
-                        -2
+                deltaUdpate = Date.now() - timeOfLastPartialUpdate;
+                if (
+                    startGameTimestamp &&
+                    (deltaUdpate > 250 || timeOfLastPartialUpdate === 0)
+                ) {
+                    // TODO add cheap checks here
+                    const secondsLeft = Math.floor(
+                        GAME_COUNTDOWN_SECONDS + (startGameTimestamp - Date.now()) / 1000
                     );
-                    timeOfLastPartialUpdate = Date.now();
+                    if (secondsLeft <= 0 && timeOfLastPartialUpdate !== 0) {
+                        finishGame();
+                    } else {
+                        document.getElementById("minutes").innerHTML = "0:";
+                        document.getElementById("seconds").innerHTML = `0${secondsLeft}`.slice(
+                            -2
+                        );
+                        timeOfLastPartialUpdate = Date.now();
+                    }
                 }
-            }
-        }
-        else{
-            if ((Date.now() - santaDiedTime) > 3000){
-                app.ticker.remove(update);
-                gameOver(santaPerson, bricksContainer, background);
+            } else {
+                if ((Date.now() - santaDiedTime) > 3000) {
+                    app.ticker.remove(update);
+                    gameOver(santaPerson, bricksContainer, background);
+                }
             }
         }
 
@@ -129,14 +130,18 @@ function loadGame() {
 }
 
 function keyDownHandler(e) {
-    if (["ArrowRight", "ArrowLeft"].indexOf(e.key) !== -1){
-        lastKeybEvent = e;
+    if (["Space", "Escape"].indexOf(e.code) !== -1){
+        paused = !paused;
     }
-    else{
-        lastKeybEvent = {
-            key : lastKeybEvent.key,
-            shiftKey : e.shiftKey
-        };
+    else {
+        if (["ArrowRight", "ArrowLeft"].indexOf(e.key) !== -1) {
+            lastKeybEvent = e;
+        } else {
+            lastKeybEvent = {
+                key: lastKeybEvent.key,
+                shiftKey: e.shiftKey
+            };
+        }
     }
 }
 

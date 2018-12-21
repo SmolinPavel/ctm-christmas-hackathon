@@ -10,15 +10,18 @@ function generateBricks() {
     delta_treshold = Math.max(delta_treshold * 0.95, 400);
     last_generation_time = now;
     game_time_in_sec = (now - start_generation_time) / 1000;
-    if (Math.random() < 0.33) {
+    if (Math.random() < 0.25) {
       outcome.push(generateBomb(-game_time_in_sec * 10));
     }
-    else if(Math.random() >= 0.33 && Math.random() < 0.66) {
+    else if(Math.random() >= 0.25 && Math.random() < 0.5) {
       outcome.push(generateAxe(-game_time_in_sec * 10));
 	}
-	if (Math.random() >= 0.66) {
+	else if(Math.random() >= 0.5 && Math.random() < 0.75) {
 		outcome.push(generateBoomerang(-game_time_in_sec * 10));
 	  }
+	if (Math.random() >= 0.75) {
+		outcome.push(generateDynamite(-game_time_in_sec * 10));
+    }
   }
   return outcome;
 }
@@ -48,6 +51,19 @@ function generateBomb(top) {
   }
   return sprite;
 }
+
+function generateDynamite(top) {
+	const texture = PIXI.Texture.fromImage(DYNAMITE_URL);
+	const sprite = new PIXI.Sprite(texture);
+	sprite.x = Math.random() * APP_WIDTH;
+	sprite.y = top;
+	sprite.anchor.set(0.5);
+	sprite.scale.set(0.3, 0.3);
+	if (Math.random() > 0.75) {
+		attachSparckles(sprite);
+	}
+	return sprite;
+  }
 
 function generateAxe(top) {
   const texture = PIXI.Texture.fromImage(AXE_URL);

@@ -1,8 +1,8 @@
 {
   "editor.tabSize": 4,
-  "editor.insertSpaces": true,
-  "editor.formatOnSave": true,
-  "eslint.autoFixOnSave": true,
+  "editor.insertSpaces": false,
+  "editor.formatOnSave": false,
+  "eslint.autoFixOnSave": false,
   "[markdown]": {
     "editor.wordWrap": "on",
     "editor.quickSuggestions": false,

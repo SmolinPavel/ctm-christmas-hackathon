@@ -1,6 +1,7 @@
 let last_generation_time = 0;
 let start_generation_time = Date.now();
 let delta_treshold = 4000;
+let particles_attached = 0;
 
 function generateBricks() {
   const now = Date.now();
@@ -9,7 +10,7 @@ function generateBricks() {
   if ((delta > delta_treshold) || (last_generation_time === 0)){
     delta_treshold = Math.max(delta_treshold * 0.95, 400);
     last_generation_time = now;
-    game_time_in_sec = (now - start_generation_time) / 1000;
+    const game_time_in_sec = (now - start_generation_time) / 1000;
     if (Math.random() > 0.5) {
       outcome.push(generateBomb(-game_time_in_sec * 10));
     }
@@ -40,8 +41,9 @@ function generateBomb(top) {
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
-  if (Math.random() > 0.75) {
+  if (particles_attached < MAX_PARTICLES_ALLOWED) {
       attachSparckles(sprite);
+      particles_attached += 1;
   }
   return sprite;
 }
@@ -68,10 +70,10 @@ const generateFinishPage = callback => generatePage(FINISH_PAGE_URL, callback, f
 const generateGameOverPage = callback => generatePage(GAME_OVER_PAGE_URL, callback, false);
 
 const startKeyDownHandler = ({ keyCode }, sprite, callback) => {
-    if (keyCode === 13) {
+    //if (keyCode === 13) {
         sprite.parent.removeChild(sprite);
         callback();
-    }
+    //}
 };
 
 const generatePage = (pageUrl, callback, removeSprite) => {

@@ -50,19 +50,33 @@ function updateSantaAnimation(santaPerson){
 }
 
 function updateAnimations(santaPerson, bricksContainer, background, delta){
-    for (const index in bricksContainer.children) {
+    let index = 0;
+    for (let index = 0; index< bricksContainer.children.length; index++) {
         const child = bricksContainer.children[index];
-        if (child.y > APP_HEIGHT - santaPerson.height/2) {
+        child.y += 1;
+        if (child.isSin){
+            child.x = child.startX + 50 * Math.cos((Date.now() - startGameTimestamp) / 100);
+        }
+        child.rotation += child.rotationSpeed * delta;
+        if (child.y > APP_HEIGHT + child.height){
+            if (child.emitter) {
+                cancelAnimationFrame(child.updateId);
+                child.updateId = 0;
+                child.emitter.emit = false;
+                child.emitter.destroy();
+                particles_attached -= 1;
+            }
+            child.removeChildren();
+            bricksContainer.removeChild(child);
+            child.destroy();
+            index --;
+        }
+        else if ((child.y > APP_HEIGHT - santaPerson.height/2) && (child.y < APP_HEIGHT - child.height/4)) {
             if (Math.abs(child.x - santaPerson.x) < santaPerson.width/2) {
                 santaDiedTime = Date.now();
                 const ifrm = document.getElementById("sndframe");
                 ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/282913659&color=%23ff5500&auto_play=true");
             }
-            child.removeChildren();
-            bricksContainer.removeChild(child);
-        } else {
-            child.y += 1;
-            child.rotation += 0.05 * delta;
         }
     }
     background.tilePosition.y += 1 + 2*( Date.now() - start_generation_time)/GAME_COUNTDOWN_SECONDS/1000;
@@ -117,7 +131,9 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                     gameOver(santaPerson, bricksContainer, background);
                 }
             }
-            updateSantaAnimation(santaPerson, delta);
+            if ((Date.now() - startGameTimestamp > 20000) || (santaDiedTime !== 0)) {
+                updateSantaAnimation(santaPerson, delta);
+            }
         }
     }
 }
@@ -148,7 +164,8 @@ function loadGame() {
   ifrm.setAttribute("id", "sndframe");
   ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/371455856&color=%23ff5500&auto_play=true");
   ifrm.setAttribute("style", "opacity: 0;")
-  setTimeout(() => document.body.appendChild(ifrm), 1000);
+    document.getElementById("footer").style.display = "flex";
+    setTimeout(() => document.body.appendChild(ifrm), 1000);
 
 }
 
@@ -193,6 +210,7 @@ function mouseMoveHandler(e) {
 function gameOver(santaPerson, bricksContainer, background) {
   startGameTimestamp = null;
     document.getElementById("countdown").innerHTML = "";
+    document.getElementById("footer").style.display = "none";
     const gameOverPage = generateGameOverPage(() => window.location.reload());
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
@@ -202,6 +220,7 @@ function gameOver(santaPerson, bricksContainer, background) {
 
 function finishGame(santaPerson, bricksContainer, background) {
     document.getElementById("countdown").innerHTML = "";
+    document.getElementById("footer").style.display = "none";
     startGameTimestamp = null;
   const finishGamePage = generateFinishPage(() => window.location.reload());
   app.stage.removeChild(background);

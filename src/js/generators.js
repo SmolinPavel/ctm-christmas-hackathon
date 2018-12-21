@@ -47,6 +47,7 @@ function generateBomb(top) {
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
+    sprite.rotationSpeed = 0.05;
   if (particles_attached < MAX_PARTICLES_ALLOWED) {
       attachSparckles(sprite);
       particles_attached += 1;
@@ -61,9 +62,11 @@ function generateDynamite(top) {
 	sprite.y = top;
 	sprite.anchor.set(0.5);
 	sprite.scale.set(0.3, 0.3);
-	if (Math.random() > 0.75) {
-		attachSparckles(sprite);
-	}
+	sprite.rotationSpeed = 0.05;
+    if (particles_attached < MAX_PARTICLES_ALLOWED) {
+        attachSparckles(sprite);
+        particles_attached += 1;
+    }
 	return sprite;
   }
 
@@ -73,6 +76,7 @@ function generateAxe(top) {
   sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
   sprite.y = top;
   sprite.anchor.set(0.5);
+    sprite.rotationSpeed = 0.05;
   sprite.scale.set(0.25, 0.25);
   return sprite;
 }
@@ -82,6 +86,7 @@ function generateBoomerang(top) {
 	const sprite = new PIXI.Sprite(texture);
 	sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
 	sprite.y = top;
+    sprite.rotationSpeed = -0.5;
 	sprite.anchor.set(0.5);
 	sprite.scale.set(0.07, 0.07);
 	return sprite;

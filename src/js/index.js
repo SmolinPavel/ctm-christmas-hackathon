@@ -68,7 +68,7 @@ function updateAnimations(santaPerson, bricksContainer, background, delta){
             child.destroy();
             index --;
         }
-        else if (child.y > APP_HEIGHT - santaPerson.height/2) {
+        else if ((child.y > APP_HEIGHT - santaPerson.height/2) && (child.y < APP_HEIGHT - child.height/4)) {
             if (Math.abs(child.x - santaPerson.x) < santaPerson.width/2) {
                 santaDiedTime = Date.now();
                 const ifrm = document.getElementById("sndframe");

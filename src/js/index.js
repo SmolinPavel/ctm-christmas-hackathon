@@ -164,7 +164,8 @@ function loadGame() {
   ifrm.setAttribute("id", "sndframe");
   ifrm.setAttribute("src", "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/371455856&color=%23ff5500&auto_play=true");
   ifrm.setAttribute("style", "opacity: 0;")
-  setTimeout(() => document.body.appendChild(ifrm), 1000);
+    document.getElementById("footer").style.display = "flex";
+    setTimeout(() => document.body.appendChild(ifrm), 1000);
 
 }
 
@@ -209,6 +210,7 @@ function mouseMoveHandler(e) {
 function gameOver(santaPerson, bricksContainer, background) {
   startGameTimestamp = null;
     document.getElementById("countdown").innerHTML = "";
+    document.getElementById("footer").style.display = "none";
     const gameOverPage = generateGameOverPage(() => window.location.reload());
   app.stage.removeChild(background);
   app.stage.removeChild(bricksContainer);
@@ -218,6 +220,7 @@ function gameOver(santaPerson, bricksContainer, background) {
 
 function finishGame(santaPerson, bricksContainer, background) {
     document.getElementById("countdown").innerHTML = "";
+    document.getElementById("footer").style.display = "none";
     startGameTimestamp = null;
   const finishGamePage = generateFinishPage(() => window.location.reload());
   app.stage.removeChild(background);

@@ -55,7 +55,7 @@ function updateAnimations(santaPerson, bricksContainer, background, delta){
         const child = bricksContainer.children[index];
         child.y += 1;
         child.rotation += child.rotationSpeed * delta;
-        if (child.y > APP_HEIGHT){
+        if (child.y > APP_HEIGHT + child.height){
             if (child.emitter) {
                 cancelAnimationFrame(child.updateId);
                 child.updateId = 0;

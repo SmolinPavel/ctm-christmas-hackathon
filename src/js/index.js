@@ -128,7 +128,9 @@ function wrapUpdate(santaPerson, bricksContainer, background) {
                     gameOver(santaPerson, bricksContainer, background);
                 }
             }
-            updateSantaAnimation(santaPerson, delta);
+            if (Date.now() - startGameTimestamp > 20000) {
+                updateSantaAnimation(santaPerson, delta);
+            }
         }
     }
 }

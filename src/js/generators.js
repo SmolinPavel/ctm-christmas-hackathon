@@ -104,10 +104,10 @@ const generateFinishPage = callback => generatePage(FINISH_PAGE_URL, callback, f
 const generateGameOverPage = callback => generatePage(GAME_OVER_PAGE_URL, callback, false);
 
 const startKeyDownHandler = ({ keyCode }, sprite, callback) => {
-    //if (keyCode === 13) {
+    if (keyCode === 13) {
         sprite.parent.removeChild(sprite);
         callback();
-    //}
+    }
 };
 
 const generatePage = (pageUrl, callback, removeSprite) => {

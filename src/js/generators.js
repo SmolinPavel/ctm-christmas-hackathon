@@ -18,10 +18,10 @@ function generateBricks() {
       outcome.push(generateAxe(-game_time_in_sec * 10));
 	}
 	else if(Math.random() >= 0.5 && Math.random() < 0.75) {
-		outcome.push(generateBoomerang(-game_time_in_sec * 10));
-	  }
+        outcome.push(generateDynamite(-game_time_in_sec * 10));
+	}
 	if (Math.random() >= 0.75) {
-		outcome.push(generateDynamite(-game_time_in_sec * 10));
+        outcome.push(generateBoomerang(-game_time_in_sec * 10));
     }
   }
   return outcome;
@@ -89,6 +89,8 @@ function generateBoomerang(top) {
     sprite.rotationSpeed = -0.5;
 	sprite.anchor.set(0.5);
 	sprite.scale.set(0.07, 0.07);
+    sprite.startX = sprite.x;
+    sprite.isSin = true;
 	return sprite;
   }
 

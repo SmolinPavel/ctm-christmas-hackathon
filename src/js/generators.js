@@ -10,12 +10,15 @@ function generateBricks() {
     delta_treshold = Math.max(delta_treshold * 0.95, 400);
     last_generation_time = now;
     game_time_in_sec = (now - start_generation_time) / 1000;
-    if (Math.random() > 0.5) {
+    if (Math.random() < 0.33) {
       outcome.push(generateBomb(-game_time_in_sec * 10));
     }
-    else{
+    else if(Math.random() >= 0.33 && Math.random() < 0.66) {
       outcome.push(generateAxe(-game_time_in_sec * 10));
-    }
+	}
+	if (Math.random() >= 0.66) {
+		outcome.push(generateBoomerang(-game_time_in_sec * 10));
+	  }
   }
   return outcome;
 }
@@ -55,6 +58,16 @@ function generateAxe(top) {
   sprite.scale.set(0.25, 0.25);
   return sprite;
 }
+
+function generateBoomerang(top) {
+	const texture = PIXI.Texture.fromImage(BOOMERANG_URL);
+	const sprite = new PIXI.Sprite(texture);
+	sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
+	sprite.y = top;
+	sprite.anchor.set(0.5);
+	sprite.scale.set(0.07, 0.07);
+	return sprite;
+  }
 
 function generateBackground() {
   const texture = PIXI.Texture.fromImage(BACKGROUND_URL);

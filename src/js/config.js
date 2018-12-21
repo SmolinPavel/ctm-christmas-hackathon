@@ -7,6 +7,7 @@ const APP_OFFSET_LEFT = 30;
 
 const BOMB_URL = './assets/bomb.png';
 const AXE_URL = './assets/axe.png';
+const BOOMERANG_URL = './assets/boomerang.png';
 const SANTA_URL = './assets/santas.png';
 const BACKGROUND_URL = './assets/background_forest.png';
 const START_PAGE_URL = './assets/start_picture.jpg';

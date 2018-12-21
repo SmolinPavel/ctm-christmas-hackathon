@@ -54,6 +54,9 @@ function updateAnimations(santaPerson, bricksContainer, background, delta){
     for (let index = 0; index< bricksContainer.children.length; index++) {
         const child = bricksContainer.children[index];
         child.y += 1;
+        if (child.isSin){
+            child.x = child.startX + 50 * Math.cos((Date.now() - startGameTimestamp) / 100);
+        }
         child.rotation += child.rotationSpeed * delta;
         if (child.y > APP_HEIGHT + child.height){
             if (child.emitter) {

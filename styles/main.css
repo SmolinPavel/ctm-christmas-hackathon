@@ -37,7 +37,7 @@ footer {
 }
 
 footer div {
-  width: 600px;
+  width: 700px;
 }
 
 footer div img {
@@ -48,7 +48,7 @@ footer div p {
   color: #42a1b5;
   font-size: 20px;
   font-weight: bold;
-  padding-top: 14px;
+  padding-left: 5px;
 }
 
 .footer {
@@ -66,7 +66,7 @@ footer div p {
   text-align: left;
 
   /* Apply animation to this element */
-  animation: move 5s linear;
+  animation: move 10s linear;
 }
 /* Move it (define the animation) */
 @keyframes move {

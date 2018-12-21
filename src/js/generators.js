@@ -1,6 +1,7 @@
 let last_generation_time = 0;
 let start_generation_time = Date.now();
 let delta_treshold = 4000;
+let particles_attached = 0;
 
 function generateBricks() {
   const now = Date.now();
@@ -9,7 +10,7 @@ function generateBricks() {
   if ((delta > delta_treshold) || (last_generation_time === 0)){
     delta_treshold = Math.max(delta_treshold * 0.95, 400);
     last_generation_time = now;
-    game_time_in_sec = (now - start_generation_time) / 1000;
+    const game_time_in_sec = (now - start_generation_time) / 1000;
     if (Math.random() < 0.25) {
       outcome.push(generateBomb(-game_time_in_sec * 10));
     }
@@ -46,8 +47,10 @@ function generateBomb(top) {
   sprite.y = top;
   sprite.anchor.set(0.5);
   sprite.scale.set(0.1, 0.1);
-  if (Math.random() > 0.75) {
+    sprite.rotationSpeed = 0.05;
+  if (particles_attached < MAX_PARTICLES_ALLOWED) {
       attachSparckles(sprite);
+      particles_attached += 1;
   }
   return sprite;
 }
@@ -59,9 +62,11 @@ function generateDynamite(top) {
 	sprite.y = top;
 	sprite.anchor.set(0.5);
 	sprite.scale.set(0.3, 0.3);
-	if (Math.random() > 0.75) {
-		attachSparckles(sprite);
-	}
+	sprite.rotationSpeed = 0.05;
+    if (particles_attached < MAX_PARTICLES_ALLOWED) {
+        attachSparckles(sprite);
+        particles_attached += 1;
+    }
 	return sprite;
   }
 
@@ -71,6 +76,7 @@ function generateAxe(top) {
   sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
   sprite.y = top;
   sprite.anchor.set(0.5);
+    sprite.rotationSpeed = 0.05;
   sprite.scale.set(0.25, 0.25);
   return sprite;
 }
@@ -80,6 +86,7 @@ function generateBoomerang(top) {
 	const sprite = new PIXI.Sprite(texture);
 	sprite.x = SANTA_WIDTH / 2 + Math.random() * (APP_WIDTH - SANTA_WIDTH);
 	sprite.y = top;
+    sprite.rotationSpeed = -0.5;
 	sprite.anchor.set(0.5);
 	sprite.scale.set(0.07, 0.07);
 	return sprite;
